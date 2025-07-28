@@ -21,14 +21,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Templates-based URLs (HTML pages)
-    path('', include('core.urls')),
+    path('', include('home.urls')),
     path('users/', include('users.urls')),
     path('posts/', include('posts.urls')),
     path('comments/', include('comments.urls')),
     path('admin_panel/', include('admin_panel.urls')),
        
     # API URLs (DRF)
-    path('api/core/', include('core.api.urls')),
+    path('api/home/', include('home.api.urls')),
     path('api/users/', include('users.api.urls')),
     path('api/posts/', include('posts.api.urls')),
     path('api/comments/', include('comments.api.urls')),
