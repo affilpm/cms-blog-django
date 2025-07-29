@@ -1,49 +1,49 @@
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        }
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
         
-        .bg-gradient-primary { background: var(--primary-gradient) !important; }
-        .bg-gradient-dark { background: var(--dark-gradient) !important; }
+.bg-gradient-primary { background: var(--primary-gradient) !important; }
+.bg-gradient-dark { background: var(--dark-gradient) !important; }
         
-        .navbar-brand-gradient {
-            background: linear-gradient(45deg, #fff, #e3f2fd);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+.navbar-brand-gradient {
+    background: linear-gradient(45deg, #fff, #e3f2fd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
         
-        .logo-pulse::after {
-            content: '';
-            position: absolute;
-            top: -3px;
-            right: -3px;
-            width: 8px;
-            height: 8px;
-            background: #4CAF50;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
+.logo-pulse::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 8px;
+    height: 8px;
+    background: #4CAF50;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
         
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-        }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
         
-        .footer-link { 
-            transition: all 0.3s ease; 
-        }
-        .footer-link:hover { 
-            transform: translateY(-1px); 
-        }
+.footer-link { 
+    transition: all 0.3s ease; 
+}
+.footer-link:hover { 
+    transform: translateY(-1px); 
+}
         
-        /* Touch target optimization */
-        .nav-link { min-height: 44px; }
-        .btn { min-height: 44px; }
+/* Touch target optimization */
+.nav-link { min-height: 44px; }
+.btn { min-height: 44px; }
         
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    }
+}
