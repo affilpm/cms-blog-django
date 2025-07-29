@@ -1,0 +1,445 @@
+<!-- templates/registration/register.html -->
+{% extends 'base.html' %}
+{% block title %}Register - CRM Blog{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
+    }
+    
+    .auth-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        overflow: hidden;
+        max-width: 450px;
+        width: 100%;
+    }
+    
+    .auth-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-align: center;
+        padding: 2rem 1.5rem;
+        margin-bottom: 0;
+    }
+    
+    .auth-header h2 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.8rem;
+    }
+    
+    .auth-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+        font-size: 0.95rem;
+    }
+    
+    .auth-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .form-floating {
+        margin-bottom: 1rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .form-control.is-invalid {
+        border-color: #dc3545;
+    }
+    
+    .form-control.is-valid {
+        border-color: #28a745;
+    }
+    
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        font-size: 1rem;
+        color: white;
+        width: 100%;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+    
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .auth-links {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .auth-links a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .auth-links a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+    
+    .alert {
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 1rem;
+    }
+    
+    .alert-danger {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+        color: white;
+    }
+    
+    .alert-success {
+        background: linear-gradient(135deg, #51cf66, #40c057);
+        color: white;
+    }
+    
+    .password-requirements {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+    }
+    
+    .password-requirements h6 {
+        color: #495057;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .password-requirements ul {
+        margin: 0;
+        padding-left: 1.2rem;
+    }
+    
+    .password-requirements li {
+        color: #6c757d;
+        margin-bottom: 0.2rem;
+    }
+    
+    .requirement-check {
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    .requirement-cross {
+        color: #dc3545;
+        font-weight: bold;
+    }
+    
+    .terms-checkbox {
+        display: flex;
+        align-items: flex-start;
+        margin: 1rem 0;
+        gap: 0.5rem;
+    }
+    
+    .terms-checkbox input {
+        margin-top: 0.3rem;
+    }
+    
+    .terms-checkbox label {
+        font-size: 0.9rem;
+        color: #6c757d;
+        line-height: 1.4;
+    }
+    
+    .terms-checkbox a {
+        color: #667eea;
+        text-decoration: none;
+    }
+    
+    .terms-checkbox a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Join CRM Blog</h2>
+            <p>Create your account to get started</p>
+        </div>
+        
+        <div class="auth-body">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Please correct the errors below:</strong>
+                    <ul class="mb-0 mt-2">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post" id="registerForm">
+                {% csrf_token %}
+                
+                <div class="form-floating">
+                    <input type="text" 
+                           class="form-control" 
+                           id="id_username" 
+                           name="username" 
+                           placeholder="Username"
+                           value="{{ form.username.value|default:'' }}"
+                           required>
+                    <label for="id_username">Username</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="email" 
+                           class="form-control" 
+                           id="id_email" 
+                           name="email" 
+                           placeholder="Email"
+                           value="{{ form.email.value|default:'' }}"
+                           required>
+                    <label for="id_email">Email Address</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="text" 
+                           class="form-control" 
+                           id="id_first_name" 
+                           name="first_name" 
+                           placeholder="First Name"
+                           value="{{ form.first_name.value|default:'' }}"
+                           required>
+                    <label for="id_first_name">First Name</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="text" 
+                           class="form-control" 
+                           id="id_last_name" 
+                           name="last_name" 
+                           placeholder="Last Name"
+                           value="{{ form.last_name.value|default:'' }}"
+                           required>
+                    <label for="id_last_name">Last Name</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" 
+                           class="form-control" 
+                           id="id_password1" 
+                           name="password1" 
+                           placeholder="Password"
+                           required>
+                    <label for="id_password1">Password</label>
+                </div>
+                
+                <div class="password-requirements" id="passwordRequirements" style="display: none;">
+                    <h6>Password Requirements:</h6>
+                    <ul>
+                        <li id="req-length"><span class="requirement-cross">✗</span> At least 8 characters long</li>
+                        <li id="req-upper"><span class="requirement-cross">✗</span> Contains uppercase letter</li>
+                        <li id="req-lower"><span class="requirement-cross">✗</span> Contains lowercase letter</li>
+                        <li id="req-number"><span class="requirement-cross">✗</span> Contains number</li>
+                    </ul>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" 
+                           class="form-control" 
+                           id="id_password2" 
+                           name="password2" 
+                           placeholder="Confirm Password"
+                           required>
+                    <label for="id_password2">Confirm Password</label>
+                </div>
+                
+                <div class="terms-checkbox">
+                    <input type="checkbox" 
+                           class="form-check-input" 
+                           id="terms" 
+                           name="terms" 
+                           required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#" target="_blank">Terms of Service</a> 
+                        and <a href="#" target="_blank">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-register">
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="auth-links">
+                <p class="mb-0">Already have an account? 
+                    {% comment %} <a href="{% url 'login' %}">Sign in here</a> {% endcomment %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const password1 = document.getElementById('id_password1');
+        const password2 = document.getElementById('id_password2');
+        const passwordRequirements = document.getElementById('passwordRequirements');
+        const form = document.getElementById('registerForm');
+        const submitBtn = document.querySelector('.btn-register');
+        
+        // Show password requirements when password field is focused
+        password1.addEventListener('focus', function() {
+            passwordRequirements.style.display = 'block';
+        });
+        
+        // Real-time password validation
+        password1.addEventListener('input', function() {
+            const password = this.value;
+            
+            // Check length
+            const lengthReq = document.getElementById('req-length');
+            if (password.length >= 8) {
+                lengthReq.innerHTML = '<span class="requirement-check">✓</span> At least 8 characters long';
+                lengthReq.querySelector('span').className = 'requirement-check';
+            } else {
+                lengthReq.innerHTML = '<span class="requirement-cross">✗</span> At least 8 characters long';
+                lengthReq.querySelector('span').className = 'requirement-cross';
+            }
+            
+            // Check uppercase
+            const upperReq = document.getElementById('req-upper');
+            if (/[A-Z]/.test(password)) {
+                upperReq.innerHTML = '<span class="requirement-check">✓</span> Contains uppercase letter';
+                upperReq.querySelector('span').className = 'requirement-check';
+            } else {
+                upperReq.innerHTML = '<span class="requirement-cross">✗</span> Contains uppercase letter';
+                upperReq.querySelector('span').className = 'requirement-cross';
+            }
+            
+            // Check lowercase
+            const lowerReq = document.getElementById('req-lower');
+            if (/[a-z]/.test(password)) {
+                lowerReq.innerHTML = '<span class="requirement-check">✓</span> Contains lowercase letter';
+                lowerReq.querySelector('span').className = 'requirement-check';
+            } else {
+                lowerReq.innerHTML = '<span class="requirement-cross">✗</span> Contains lowercase letter';
+                lowerReq.querySelector('span').className = 'requirement-cross';
+            }
+            
+            // Check number
+            const numberReq = document.getElementById('req-number');
+            if (/\d/.test(password)) {
+                numberReq.innerHTML = '<span class="requirement-check">✓</span> Contains number';
+                numberReq.querySelector('span').className = 'requirement-check';
+            } else {
+                numberReq.innerHTML = '<span class="requirement-cross">✗</span> Contains number';
+                numberReq.querySelector('span').className = 'requirement-cross';
+            }
+            
+            checkPasswordMatch();
+        });
+        
+        // Check password confirmation match
+        password2.addEventListener('input', checkPasswordMatch);
+        
+        function checkPasswordMatch() {
+            if (password1.value && password2.value) {
+                if (password1.value === password2.value) {
+                    password2.classList.remove('is-invalid');
+                    password2.classList.add('is-valid');
+                } else {
+                    password2.classList.remove('is-valid');
+                    password2.classList.add('is-invalid');
+                }
+            } else {
+                password2.classList.remove('is-valid', 'is-invalid');
+            }
+        }
+        
+        // Animate form inputs on focus
+        const inputs = document.querySelectorAll('.form-control');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Add loading state to submit button
+        form.addEventListener('submit', function() {
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+            submitBtn.disabled = true;
+        });
+        
+        // Username availability check (you can implement this with AJAX)
+        const username = document.getElementById('id_username');
+        let usernameTimeout;
+        
+        username.addEventListener('input', function() {
+            clearTimeout(usernameTimeout);
+            const value = this.value.trim();
+            
+            if (value.length >= 3) {
+                usernameTimeout = setTimeout(() => {
+                    // You can implement AJAX username check here
+                    // For now, just add visual feedback
+                    console.log('Checking username availability for:', value);
+                }, 500);
+            }
+        });
+    });
+</script>
+{% endblock %}
