@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - CRM Blog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'users_static/css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center py-5" style="min-height: calc(100vh - 200px);">
+    <div class="auth-card card shadow-lg border-0 rounded-4" style="max-width: 450px; width: 100%;">
+        <div class="auth-header card-header text-white text-center py-4 rounded-top-4 border-0">
+            <h2 class="card-title h3 mb-2 fw-semibold">Welcome Back</h2>
+            <p class="card-text mb-0 opacity-75">Sign in to continue</p>
+        </div>
+
+        <div class="card-body p-4">
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control rounded-3" id="email" name="email" 
+                           placeholder="Email" required>
+                    <label for="email">Email</label>
+                    <div class="invalid-feedback">Please enter your email.</div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control rounded-3" id="password" name="password" 
+                           placeholder="Password" required>
+                    <label for="password">Password</label>
+                    <div class="invalid-feedback">Please enter your password.</div>
+                </div>
+
+                <button type="submit" class="btn btn-register btn-lg w-100 text-white fw-semibold rounded-3 mt-2">
+                    Login
+                </button>
+            </form>
+
+            <div class="text-center mt-4 pt-3 border-top">
+                <p class="mb-0 text-muted">Don't have an account? 
+                    <a href="{% url 'register' %}" class="text-decoration-none">Register here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
