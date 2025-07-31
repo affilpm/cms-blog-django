@@ -1,8 +1,8 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-
-def register(request):
+from django.views.generic import TemplateView
+from core.views.mixins import JWTLoginRequiredMixin
     
-    return render(request, 'users/register.html')
+class RegisterView(JWTLoginRequiredMixin,TemplateView):
+    template_name = 'users/register.html'
+
+class LoginView(TemplateView):
+    template_name = 'users/login.html'
