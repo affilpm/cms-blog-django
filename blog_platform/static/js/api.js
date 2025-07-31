@@ -1,6 +1,6 @@
 // Generic function for JSON requests (GET, POST, PUT, PATCH, DELETE)
 async function apiRequest(method, url, data = null, withCredentials = false) {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken')?.ariaValueMax;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     const options = {
         method,
@@ -46,7 +46,7 @@ export function del(url, withCredentials = false) {
 
 // For forms specifically
 export async function postFormData(url, formData, withCredentials = false) {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken')?.value;
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     const options = {
         method: 'POST',

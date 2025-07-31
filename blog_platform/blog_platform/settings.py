@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
     'admin_panel',
     'home',
     'rest_framework',
+    'rest_framework_simplejwt',
+    
 ]
 
 MIDDLEWARE = [
@@ -55,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.jwt_refresh.JWTRefreshMiddleware',
 ]
 
 ROOT_URLCONF = 'blog_platform.urls'
@@ -141,10 +145,23 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
-
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',  
+]
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_COOKIE_HTTP_ONLY': True,
+    'AUTH_COOKIE_SECURE': True,  # True for HTTPS
+    'AUTH_COOKIE_SAMESITE': 'Lax',
 }

@@ -1,0 +1,425 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - MyBlog{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Minimal custom styles - mostly using Bootstrap */
+    .hero-bg {
+        background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-purple) 100%);
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-2px);
+        transition: transform 0.2s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-bg text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Welcome to <span class="text-warning">MyBlog</span>
+                </h1>
+                <p class="lead mb-4">
+                    Discover insightful stories, expert advice, and the latest trends in 
+                    technology, lifestyle, and business. Join our community of passionate 
+                    readers and writers.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#" class="btn btn-warning btn-lg">
+                        <i class="bi bi-book me-2"></i>Explore Posts
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>Join Community
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-5 mt-lg-0 text-center">
+                <div class="bg-white bg-opacity-10 rounded-3 p-5">
+                    <i class="bi bi-journal-text display-1 text-warning"></i>
+                    <h3 class="mt-3">Start Reading Today</h3>
+                    <p class="mb-0">Join thousands of readers worldwide</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="bg-primary text-white py-4">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
+                <h3 class="fw-bold mb-1">1,250+</h3>
+                <small class="text-white-50">Articles Published</small>
+            </div>
+            <div class="col-md-3 col-6 mb-3 mb-md-0">
+                <h3 class="fw-bold mb-1">15K+</h3>
+                <small class="text-white-50">Active Readers</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <h3 class="fw-bold mb-1">50+</h3>
+                <small class="text-white-50">Expert Writers</small>
+            </div>
+            <div class="col-md-3 col-6">
+                <h3 class="fw-bold mb-1">98%</h3>
+                <small class="text-white-50">Reader Satisfaction</small>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Posts Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold mb-3">Featured Posts</h2>
+                <p class="lead text-muted">Hand-picked articles from our editorial team</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Featured Post 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm card-hover border-0">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/400/250?random=1" 
+                             class="card-img-top" 
+                             alt="Featured Post"
+                             style="height: 200px; object-fit: cover;">
+                        <span class="position-absolute top-0 start-0 badge bg-primary m-2">TECHNOLOGY</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">
+                            <a href="#" class="text-decoration-none text-dark stretched-link">
+                                The Future of AI in Business: Trends to Watch in 2025
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            Explore how artificial intelligence is reshaping industries and 
+                            discover the key trends that will define business success.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <small class="text-muted">
+                                <i class="bi bi-person-circle me-1"></i>John Doe
+                            </small>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>Jan 25, 2025
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Post 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm card-hover border-0">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/400/250?random=2" 
+                             class="card-img-top" 
+                             alt="Featured Post"
+                             style="height: 200px; object-fit: cover;">
+                        <span class="position-absolute top-0 start-0 badge bg-success m-2">LIFESTYLE</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">
+                            <a href="#" class="text-decoration-none text-dark stretched-link">
+                                Sustainable Living: Simple Changes for a Better Tomorrow
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            Learn practical tips and strategies to reduce your environmental 
+                            footprint while maintaining a comfortable lifestyle.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <small class="text-muted">
+                                <i class="bi bi-person-circle me-1"></i>Jane Smith
+                            </small>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>Jan 23, 2025
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Post 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm card-hover border-0">
+                    <div class="position-relative">
+                        <img src="https://picsum.photos/400/250?random=3" 
+                             class="card-img-top" 
+                             alt="Featured Post"
+                             style="height: 200px; object-fit: cover;">
+                        <span class="position-absolute top-0 start-0 badge bg-info m-2">TRAVEL</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">
+                            <a href="#" class="text-decoration-none text-dark stretched-link">
+                                Hidden Gems: 10 Underrated Destinations to Visit in 2025
+                            </a>
+                        </h5>
+                        <p class="card-text text-muted flex-grow-1">
+                            Discover breathtaking locations off the beaten path that offer 
+                            unique experiences away from crowded tourist spots.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <small class="text-muted">
+                                <i class="bi bi-person-circle me-1"></i>Mike Johnson
+                            </small>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar me-1"></i>Jan 22, 2025
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Posts Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <h2 class="fw-bold mb-0">Recent Posts</h2>
+                <a href="#" class="btn btn-outline-primary">
+                    View All Posts <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Recent Post 1 -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm card-hover">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/200/150?random=4" 
+                                 class="img-fluid rounded-start h-100" 
+                                 alt="Recent Post"
+                                 style="object-fit: cover;">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <span class="badge bg-warning text-dark">BUSINESS</span>
+                                </div>
+                                <h6 class="card-title fw-bold">
+                                    <a href="#" class="text-decoration-none text-dark stretched-link">
+                                        Remote Work Revolution: Building Effective Digital Teams
+                                    </a>
+                                </h6>
+                                <p class="card-text text-muted small">
+                                    Best practices for managing remote teams and maintaining productivity 
+                                    in a distributed work environment.
+                                </p>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>5 min read
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Post 2 -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm card-hover">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/200/150?random=5" 
+                                 class="img-fluid rounded-start h-100" 
+                                 alt="Recent Post"
+                                 style="object-fit: cover;">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <span class="badge bg-danger">FOOD</span>
+                                </div>
+                                <h6 class="card-title fw-bold">
+                                    <a href="#" class="text-decoration-none text-dark stretched-link">
+                                        Healthy Meal Prep: 7 Days of Delicious Recipes
+                                    </a>
+                                </h6>
+                                <p class="card-text text-muted small">
+                                    Save time and eat healthier with these easy meal prep ideas 
+                                    that will keep you satisfied all week long.
+                                </p>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>3 min read
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Post 3 -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm card-hover">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/200/150?random=6" 
+                                 class="img-fluid rounded-start h-100" 
+                                 alt="Recent Post"
+                                 style="object-fit: cover;">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <span class="badge bg-primary">TECHNOLOGY</span>
+                                </div>
+                                <h6 class="card-title fw-bold">
+                                    <a href="#" class="text-decoration-none text-dark stretched-link">
+                                        Web Development Trends That Will Dominate 2025
+                                    </a>
+                                </h6>
+                                <p class="card-text text-muted small">
+                                    Stay ahead of the curve with these emerging web development 
+                                    trends and technologies shaping the future.
+                                </p>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>7 min read
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Post 4 -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm card-hover">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://picsum.photos/200/150?random=7" 
+                                 class="img-fluid rounded-start h-100" 
+                                 alt="Recent Post"
+                                 style="object-fit: cover;">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="mb-2">
+                                    <span class="badge bg-success">LIFESTYLE</span>
+                                </div>
+                                <h6 class="card-title fw-bold">
+                                    <a href="#" class="text-decoration-none text-dark stretched-link">
+                                        Mindful Living: Simple Practices for Inner Peace
+                                    </a>
+                                </h6>
+                                <p class="card-text text-muted small">
+                                    Discover practical mindfulness techniques to reduce stress 
+                                    and find balance in your daily routine.
+                                </p>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock me-1"></i>4 min read
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="fw-bold mb-3">Explore Categories</h2>
+                <p class="text-muted">Find content that interests you most</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 text-center bg-primary text-white card-hover">
+                    <div class="card-body py-4">
+                        <i class="bi bi-laptop display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Technology</h5>
+                        <p class="card-text">Latest tech trends and innovations</p>
+                        <span class="badge bg-white text-primary">142 Posts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 text-center bg-success text-white card-hover">
+                    <div class="card-body py-4">
+                        <i class="bi bi-heart display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Lifestyle</h5>
+                        <p class="card-text">Health, wellness, and life tips</p>
+                        <span class="badge bg-white text-success">98 Posts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 text-center bg-info text-white card-hover">
+                    <div class="card-body py-4">
+                        <i class="bi bi-airplane display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Travel</h5>
+                        <p class="card-text">Adventure and destination guides</p>
+                        <span class="badge bg-white text-info">76 Posts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6">
+                <div class="card border-0 text-center bg-danger text-white card-hover">
+                    <div class="card-body py-4">
+                        <i class="bi bi-cup-hot display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Food</h5>
+                        <p class="card-text">Recipes and culinary adventures</p>
+                        <span class="badge bg-white text-danger">54 Posts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter CTA Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="fw-bold mb-3">Stay in the Loop</h2>
+                <p class="lead mb-4">
+                    Get the latest posts delivered straight to your inbox. 
+                    Join our newsletter and never miss an update.
+                </p>
+                
+                <form class="row g-2 justify-content-center">
+                    <div class="col-md-6">
+                        <input type="email" class="form-control form-control-lg" 
+                               placeholder="Enter your email address" required>
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-warning btn-lg">
+                            <i class="bi bi-envelope me-2"></i>Subscribe
+                        </button>
+                    </div>
+                </form>
+                
+                <small class="text-white-50 mt-3 d-block">
+                    <i class="bi bi-shield-check me-1"></i>
+                    No spam, unsubscribe anytime. We respect your privacy.
+                </small>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

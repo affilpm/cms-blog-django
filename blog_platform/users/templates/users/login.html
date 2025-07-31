@@ -17,8 +17,10 @@
 
         <div class="card-body p-4">
 
-            <form method="post" novalidate>
+            <form id="login-form" novalidate>
                 {% csrf_token %}
+
+                <div id="error-message" class="alert alert-danger d-none" role="alert"></div>
 
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control rounded-3" id="email" name="email" 
@@ -47,4 +49,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script type="module" src="{% static 'users_static/js/login.js' %}" defer></script>
 {% endblock %}
