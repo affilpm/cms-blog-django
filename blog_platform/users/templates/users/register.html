@@ -25,7 +25,8 @@
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control rounded-3" id="username" name="username" 
                            placeholder="Username" required minlength="4" maxlength="30" 
-                           pattern="^[a-zA-Z0-9_.-]{4,30}$">
+                           pattern="^[a-zA-Z0-9_.-]{4,30}$"
+                    >
                     <label for="username">Username</label>
                     <div class="form-text text-muted small mb-1">4-30 characters. Use letters, numbers, and _ . - only</div>
                     <div class="invalid-feedback"></div>
@@ -34,7 +35,7 @@
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control rounded-3" id="email" name="email" 
                            placeholder="Email" required 
-                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|net|edu|gov|info|biz|co|in|[a-zA-Z]{2,})$">
+                    >
                     <label for="email">Email Address</label>
                     <div class="form-text text-muted small mb-1">Enter a valid email address (e.g., user@example.com)</div>
                     <div class="invalid-feedback"></div>
@@ -42,7 +43,8 @@
 
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control rounded-3" id="first_name" name="first_name" 
-                           placeholder="First Name" required pattern="[A-Za-z]+">
+                           placeholder="First Name" required pattern="[A-Za-z]+"
+                    >
                     <label for="first_name">First Name</label>
                     <div class="form-text text-muted small mb-1">Letters only</div>
                     <div class="invalid-feedback"></div>
@@ -50,7 +52,8 @@
 
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control rounded-3" id="last_name" name="last_name" 
-                           placeholder="Last Name" required pattern="[A-Za-z]+">
+                           placeholder="Last Name" required pattern="[A-Za-z]+"
+                    >
                     <label for="last_name">Last Name</label>
                     <div class="form-text text-muted small mb-1">Letters only</div>
                     <div class="invalid-feedback"></div>
@@ -59,7 +62,8 @@
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control rounded-3" id="password" name="password" 
                            placeholder="Password" required minlength="8"
-                           pattern="(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&]).{8,}">
+                           pattern="(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&]).{8,}"
+                    >
                     <label for="password">Password</label>
                     <div class="form-text text-muted small mb-1">At least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)</div>
                     <div class="invalid-feedback"></div>
@@ -96,5 +100,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'users_static/js/register.js' %}" defer></script>
+<script type="module" src="{% static 'users_static/js/register.js' %}" defer></script>
 {% endblock %}

@@ -1,3 +1,6 @@
+import { endpoints } from "./apiEndpoints.js";
+import { postFormData } from "../../../../static/js/api.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('registerForm');
     const errorBox = document.getElementById('errorMessage');
@@ -103,18 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isValid) return;
 
         const formData = new FormData(form);
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
 
         try {
-            const response = await fetch('/api/users/register/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                },
-                body: formData
-            });
-
-            const data = await response.json();
+            const { response, data } = await postFormData(endpoints.register, formData)
 
             if (response.ok) {
                 successBox.textContent = 'Account created successfully!';
