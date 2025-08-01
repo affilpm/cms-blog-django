@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from core.views.mixins import JWTLoginRequiredMixin
     
-class RegisterView(JWTLoginRequiredMixin,TemplateView):
+class RegisterView(TemplateView):
     template_name = 'users/register.html'
 
 class LoginView(TemplateView):
