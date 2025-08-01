@@ -35,7 +35,7 @@ export function get(url, withCredentials = false) {
     return apiRequest('GET', url, null, withCredentials);
 }
 
-export function post(url, data, withCredentials = false) {
+export function post(url, data = null, withCredentials = false) {
     return apiRequest('POST', url, data, withCredentials);
 }
 

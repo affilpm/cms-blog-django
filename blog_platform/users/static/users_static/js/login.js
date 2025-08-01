@@ -1,5 +1,5 @@
 import { postFormData } from "../../../../static/js/api.js";
-import { endpoints } from "./apiEndpoints.js";
+import { endpoints } from "../../../../static/js/apiEndpoints.js";
 
 document.getElementById('login-form').addEventListener('submit', async function (e) {
     e.preventDefault();

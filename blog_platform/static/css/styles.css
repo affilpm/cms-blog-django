@@ -1,49 +1,165 @@
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    --nav-active-bg: rgba(255, 255, 255, 0.15);
+    --nav-hover-bg: rgba(255, 255, 255, 0.1);
 }
-        
-.bg-gradient-primary { background: var(--primary-gradient) !important; }
-.bg-gradient-dark { background: var(--dark-gradient) !important; }
-        
+
+.bg-gradient-primary {
+    background: var(--primary-gradient) !important;
+}
+
+.bg-gradient-dark {
+    background: var(--dark-gradient) !important;
+}
+
 .navbar-brand-gradient {
     background: linear-gradient(45deg, #fff, #e3f2fd);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    font-weight: 700;
 }
-        
+
+.logo-pulse {
+    position: relative;
+}
+
 .logo-pulse::after {
     content: '';
     position: absolute;
-    top: -3px;
-    right: -3px;
+    top: -2px;
+    right: -2px;
     width: 8px;
     height: 8px;
     background: #4CAF50;
     border-radius: 50%;
     animation: pulse 2s infinite;
 }
-        
+
 @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.7; }
-}
-        
-.footer-link { 
-    transition: all 0.3s ease; 
-}
-.footer-link:hover { 
-    transform: translateY(-1px); 
-}
-        
-/* Touch target optimization */
-.nav-link { min-height: 44px; }
-.btn { min-height: 44px; }
-        
-@media (prefers-reduced-motion: reduce) {
-*, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
     }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+/* Navigation Styles */
+.nav-link {
+    min-height: 44px;
+    transition: all 0.3s ease;
+    border-radius: 8px !important;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-link:hover {
+    background-color: var(--nav-hover-bg);
+    transform: translateY(-1px);
+}
+
+.nav-link.active {
+    background-color: var(--nav-active-bg);
+    color: #ffc107 !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.nav-link.active::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: #ffc107;
+    border-radius: 2px;
+}
+
+/* Consistent button styling */
+.btn-nav {
+    min-height: 44px;
+    transition: all 0.3s ease;
+    border-radius: 8px !important;
+    font-weight: 500;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-nav:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-1px);
+}
+
+.btn-nav.active {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+    font-weight: 600;
+    border-color: #ffc107 !important;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.4);
+}
+
+/* Profile image styling */
+.profile-img {
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: border-color 0.3s ease;
+}
+
+.nav-link:hover .profile-img {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Footer improvements */
+.footer-link {
+    transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+    transform: translateY(-1px);
+    color: #ffc107 !important;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive optimizations */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 0.5rem;
+    }
+
+    .nav-item {
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for accessibility */
+.nav-link:focus,
+.btn-nav:focus {
+    outline: 2px solid #ffc107;
+    outline-offset: 2px;
 }

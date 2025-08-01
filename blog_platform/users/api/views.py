@@ -4,6 +4,7 @@ from rest_framework import status
 from .serializers import UserSerializer
 from django.contrib.auth import authenticate
 from core.utils.jwt_helper import JWTHelper
+from rest_framework.permissions import IsAuthenticated
 
 class RegistrationAPIView(APIView):
     def post(self, request):
@@ -51,6 +52,8 @@ class LoginAPIView(APIView):
         return Response({'detail': 'invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     
 class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request):
         response = Response({'success': True, 'details': 'Logged out successfully'})
         JWTHelper.clear_auth_cookies(response)

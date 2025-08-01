@@ -1,4 +1,4 @@
-import { endpoints } from "./apiEndpoints.js";
+import { endpoints } from "../../../../static/js/apiEndpoints.js";
 import { postFormData } from "../../../../static/js/api.js";
 
 const form = document.getElementById('registerForm');

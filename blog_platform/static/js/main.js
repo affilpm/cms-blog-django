@@ -1,37 +1,59 @@
-const navbarCollapse = document.getElementById('navbarNav');
-const navbarToggler = document.querySelector('.navbar-toggler');
-const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+import { endpoints } from "./apiEndpoints.js";
+import { post } from "./api.js";
 
-// Auto-close mobile menu on link click
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
-            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) || 
-                            new bootstrap.Collapse(navbarCollapse, { toggle: false });
+document.addEventListener("DOMContentLoaded", () => {
+    const navbarCollapse = document.getElementById("navbarNav");
+    const navbarToggler = document.querySelector(".navbar-toggler");
+    const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+    if (!navbarCollapse || !navbarToggler) return;
+
+    // Auto-close mobile menu on link click
+    navLinks.forEach(link => {
+        link.addEventListener("click", () => {
+            if (window.innerWidth < 992 && navbarCollapse.classList.contains("show")) {
+                const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) ||
+                    new bootstrap.Collapse(navbarCollapse, { toggle: false });
+                bsCollapse.hide();
+            }
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", event => {
+        const isClickInsideNav = navbarCollapse.contains(event.target);
+        const isToggler = navbarToggler.contains(event.target);
+        const isMenuOpen = navbarCollapse.classList.contains("show");
+
+        if (!isClickInsideNav && !isToggler && isMenuOpen && window.innerWidth < 992) {
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) ||
+                new bootstrap.Collapse(navbarCollapse, { toggle: false });
             bsCollapse.hide();
+        }
+    });
+
+    // Close menu on Escape key
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && navbarCollapse.classList.contains("show")) {
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) ||
+                new bootstrap.Collapse(navbarCollapse, { toggle: false });
+            bsCollapse.hide();
+            navbarToggler.focus(); // Accessibility improvement
         }
     });
 });
 
-// Close menu when clicking outside
-document.addEventListener('click', function(event) {
-    const isClickInsideNav = navbarCollapse.contains(event.target);
-    const isToggler = navbarToggler.contains(event.target);
-    const isMenuOpen = navbarCollapse.classList.contains('show');
+// Logout
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        const { response } = await post(endpoints.logout, true)
 
-    if (!isClickInsideNav && !isToggler && isMenuOpen && window.innerWidth < 992) {
-        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) || 
-                        new bootstrap.Collapse(navbarCollapse, { toggle: false });
-        bsCollapse.hide();
+        if (response.ok) {
+            window.location.href = '/users/login/';
+        } else {
+            alert('Logout failed')
+        }
+        })
     }
-});
-
-// Close menu on Escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && navbarCollapse.classList.contains('show')) {
-        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) || 
-                        new bootstrap.Collapse(navbarCollapse, { toggle: false });
-        bsCollapse.hide();
-        navbarToggler.focus(); // Return focus to toggler for accessibility
-    }
-});
