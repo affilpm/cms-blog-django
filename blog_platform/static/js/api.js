@@ -20,6 +20,13 @@ async function apiRequest(method, url, data = null, withCredentials = false) {
 
     const response = await fetch(url, options);
     const responseData = await response.json();
+
+    if (response.status === 401) {
+        alert('Session expired. Please log in again.');
+        window.location.href = 'users/login/'; 
+        return { response, data: null };
+    }
+
     return { response, data: responseData };
 }
 
