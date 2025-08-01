@@ -7,12 +7,15 @@ from ..utils.validators import (
     validate_password_strength,
     validate_username_format,
 )
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only = True)
     
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['email', 'username', 'first_name', 'last_name', 'password', 'confirm_password']
         extra_kwargs = {
             'password': {'write_only': True}
