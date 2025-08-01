@@ -1,6 +1,3 @@
-import { endpoints } from "./apiEndpoints.js";
-import { post } from "./api.js";
-
 document.addEventListener("DOMContentLoaded", () => {
     const navbarCollapse = document.getElementById("navbarNav");
     const navbarToggler = document.querySelector(".navbar-toggler");
@@ -43,17 +40,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Logout
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', async function (e) {
-        e.preventDefault();
-        const { response } = await post(endpoints.logout, true)
-
-        if (response.ok) {
-            window.location.href = '/users/login/';
-        } else {
-            alert('Logout failed')
-        }
-        })
-    }

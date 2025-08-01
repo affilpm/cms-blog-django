@@ -105,7 +105,7 @@ form.addEventListener('submit', async (e) => {
             successBox.textContent = 'Account created successfully!';
             successBox.classList.remove('d-none');
             form.reset();
-            window.location.href = "{% url 'login' %}";
+            window.location.href = "/users/login/";
         } else {
             let hasFieldErrors = false;
             for (const [field, messages] of Object.entries(data)) {
