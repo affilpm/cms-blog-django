@@ -1,23 +1,16 @@
-{% extends 'base.html' %}
+{% extends 'core/base_with_header_footer.html' %}
 {% load static %}
 
 {% block title %}Home - MyBlog{% endblock %}
 
 {% block extra_css %}
-<style>
-    /* Minimal custom styles - mostly using Bootstrap */
-    .hero-bg {
-        background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-purple) 100%);
-    }
-    
-    .card-hover:hover {
-        transform: translateY(-2px);
-        transition: transform 0.2s ease;
-    }
-</style>
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'home_static/css/home.css' %}">
+
 {% endblock %}
 
-{% block content %}
+{% block main_content %}
 <!-- Hero Section -->
 <section class="hero-bg text-white py-5">
     <div class="container py-5">

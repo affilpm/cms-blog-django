@@ -1,5 +1,5 @@
-import { endpoints } from "../../../../static/js/apiEndpoints.js";
-import { post } from "../../../../static/js/api.js";
+import { post} from "/static/core_static/js/api.js";
+import { endpoints } from "/static/core_static/js/apiEndpoints.js";
 
 function setupLogoutHandler() {
     const logoutBtn = document.getElementById('logoutBtn');
