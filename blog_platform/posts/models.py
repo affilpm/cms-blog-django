@@ -1,3 +1,63 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+from core.models.base import TimeStampedModel 
 
-# Create your models here.
+User = get_user_model()
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
+    
+    def __str__(self):
+        return self.name
+    
+class Post(TimeStampedModel):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='posts')
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    cover_image = models.ImageField(upload_to='post_images', blank=True, null=True)
+    view_count = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.title
+    
+    def total_likes(self):
+        return self.reactions.filter(reaction_type='like').count()
+    
+    def total_unlikes(self):
+        return self.reactions.filter(reaction_type='unlike').count()
+    
+class PostReaction(TimeStampedModel):
+    REACTION_CHOICES = {
+        ('like', 'Like'),
+        ('unlike', 'Unlike')
+    }    
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
+    reaction_type = models.CharField(max_length=10, choices=REACTION_CHOICES)
+    
+    class Meta:
+        unique_together = ('user', 'post')
+        
+    def __str__(self):
+        return f"{self.user} {self.reaction_type}d {self.post}"        
+
+class Comment(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    
+    def __str__(self):
+        return f"{self.user.username} on {self.post.title}"
+        
+class PostView(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='views')
+    ip_address = models.GenericIPAddressField()
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user} viewed {self.post.title}"
+    
