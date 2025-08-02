@@ -1,5 +1,5 @@
-import { endpoints } from "../../../../static/js/apiEndpoints.js";
-import { postFormData } from "../../../../static/js/api.js";
+import { postFormData } from "/static/core_static/js/api.js";
+import { endpoints } from "/static/core_static/js/apiEndpoints.js";
 
 const form = document.getElementById('registerForm');
 const errorBox = document.getElementById('errorMessage');

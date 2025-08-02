@@ -1,23 +1,12 @@
+{% extends "core/core_base.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Site{% endblock %}</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core_static/css/base_with_header_footer.css' %}">
+{% endblock %}
 
-    <link rel="stylesheet" href="{% static "css/styles.css" %}">
-
-    {% block extra_css %}{% endblock %}
-
-</head>
-<body class="d-flex flex-column min-vh-100">
+{% block content %}
+<div class="d-flex flex-column min-vh-100">
 
     <!-- Header with Bootstrap Navbar -->
     <header class="sticky-top shadow-lg bg-gradient-primary">
@@ -108,7 +97,7 @@
     
     <!-- Main Content -->
     <main class="flex-grow-1" role="main">
-        {% block content %}{% endblock %}
+        {% block main_content %}{% endblock %}
     </main>
 
     <!-- Footer -->
@@ -215,11 +204,10 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="{% static 'js/main.js' %}" defer></script>
-    <script type="module" src="{% static 'users_static/js/logout.js' %}" defer></script>
+</div>
+{% endblock%}
 
-    {% block extra_js %}{% endblock %}
-</body>
-</html>
+{% block extra_js %}
+    <script type="module" src="{% static 'core_static/js/core_base.js' %}" defer></script>
+    <script type="module" src="{% static 'users_static/js/logout.js' %}" defer></script>
+{% endblock %}

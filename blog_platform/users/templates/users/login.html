@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'core/base_with_header_footer.html' %}
 {% load static %}
 
 {% block title %}Login - CRM Blog{% endblock %}
 
 {% block extra_css %}
+{{ block.super }}
 <link rel="stylesheet" href="{% static 'users_static/css/auth.css' %}">
 {% endblock %}
 
-{% block content %}
+{% block main_content %}
 <div class="container d-flex align-items-center justify-content-center py-5" style="min-height: calc(100vh - 200px);">
     <div class="auth-card card shadow-lg border-0 rounded-4" style="max-width: 450px; width: 100%;">
         <div class="auth-header card-header text-white text-center py-4 rounded-top-4 border-0">
@@ -51,5 +52,7 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+{{ block.super }}
+
 <script type="module" src="{% static 'users_static/js/login.js' %}" defer></script>
 {% endblock %}
