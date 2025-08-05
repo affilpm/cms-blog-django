@@ -1,0 +1,138 @@
+{% extends 'core/core_base.html' %}
+{% load static %}
+
+{% block title %}Create New Post{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'posts_static/css/blog_create.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="create-post-container">
+    <div class="toolbar">
+        <a href="" class="back-link">
+            <i class="bi bi-arrow-left"></i>
+            Back to Posts
+        </a>
+        <small class="text-muted">Draft auto-saved</small>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" id="postForm">
+        {% csrf_token %}
+        
+        <!-- Category Selection -->
+        <div class="form-group">
+            <select name="category" class="category-select" required>
+                <option value="">Loading categories...</option>
+            </select>
+        </div>
+        
+        <!-- Title Input -->
+        <div class="form-group">
+            <textarea 
+                name="title" 
+                class="title-input" 
+                placeholder="Title" 
+                maxlength="255"
+                required
+            >{{ form.title.value|default:'' }}</textarea>
+            <div class="char-count">
+                <span id="titleCount">0</span>/255 characters
+            </div>
+            {% if form.title.errors %}
+                <div class="error-message" style="display: block;">
+                    {{ form.title.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Cover Image Upload -->
+        <div class="form-group">
+            <div class="image-upload-section" id="imageUploadSection">
+                <input 
+                    type="file" 
+                    name="cover_image" 
+                    id="coverImageInput" 
+                    class="file-input" 
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    data-max-size="5242880"
+                >
+                <div class="upload-content" id="uploadContent">
+                    <div class="upload-icon">
+                        <i class="bi bi-image"></i>
+                    </div>
+                    <div class="upload-text">
+                        <strong>Click to add a cover image</strong> or drag and drop
+                        <br><small>Recommended: 1200x630px | Max: 5MB</small>
+                    </div>
+                    <div class="file-type-info">
+                        Supported formats: JPEG, PNG, WebP
+                    </div>
+                </div>
+                
+                <img id="imagePreview" class="image-preview" alt="Cover preview">
+                
+                <div class="image-info" id="imageInfo">
+                    <div><strong>File:</strong> <span id="fileName"></span></div>
+                    <div><strong>Size:</strong> <span id="fileSize"></span></div>
+                    <div><strong>Dimensions:</strong> <span id="imageDimensions"></span></div>
+                </div>
+                
+                <div class="image-actions" id="imageActions">
+                    <button type="button" class="change-btn" onclick="document.getElementById('coverImageInput').click()">
+                        <i class="bi bi-arrow-repeat me-1"></i>Change Image
+                    </button>
+                    <button type="button" class="remove-btn" id="removeImageBtn">
+                        <i class="bi bi-trash me-1"></i>Remove
+                    </button>
+                </div>
+            </div>
+            
+            <div class="error-message" id="imageError"></div>
+            <div class="success-message" id="imageSuccess"></div>
+            
+            {% if form.cover_image.errors %}
+                <div class="error-message" style="display: block;">
+                    {{ form.cover_image.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Content Textarea -->
+        <div class="form-group">
+            <textarea 
+                name="content" 
+                class="content-textarea" 
+                placeholder="Tell your story..." 
+                required
+            >{{ form.content.value|default:'' }}</textarea>
+            {% if form.content.errors %}
+                <div class="error-message" style="display: block;">
+                    {{ form.content.errors.0 }}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Publish Section -->
+        <div class="publish-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button type="button" class="draft-btn">Save Draft</button>
+                    <button type="submit" class="publish-btn" id="publishBtn">
+                        <i class="bi bi-send me-1"></i>
+                        Publish
+                    </button>
+                </div>
+                <small class="text-muted">
+                    <i class="bi bi-globe me-1"></i>
+                    This will be visible to everyone
+                </small>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{% static 'posts_static/js/blog_create.js' %}" defer></script>
+{% endblock %}

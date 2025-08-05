@@ -46,23 +46,16 @@ class LoginAPIView(APIView):
                             
             refresh = JWTHelper.get_tokens_for_user(user)
             
-            response = Response({
-                'success': True,
-                'user': {
-                    'id': user.id,
-                    'email': user.email,
-                    'username': user.username
-                }
-            })
-            
-            JWTHelper.set_auth_cookies(response, str(refresh.access_token), str(refresh))
-            
-            return success_response(
+            response = success_response(
                 data = {
                     'id': user.id,
                     'email': user.email,
                     'username': user.username
                 })
+            
+            JWTHelper.set_auth_cookies(response, str(refresh.access_token), str(refresh))
+            
+            return response
         
         return error_response(message='Invalid credentials', status_code=status.HTTP_401_UNAUTHORIZED)
     
