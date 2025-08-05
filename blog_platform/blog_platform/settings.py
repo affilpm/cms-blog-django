@@ -168,6 +168,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_COOKIE_HTTP_ONLY': True,
-    'AUTH_COOKIE_SECURE': True,  # True for HTTPS
+    'AUTH_COOKIE_SECURE': False,  # True for HTTPS
     'AUTH_COOKIE_SAMESITE': 'Lax',
 }

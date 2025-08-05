@@ -63,6 +63,6 @@ class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-        response = Response({'success': True, 'details': 'Logged out successfully'})
+        response = success_response(message='Logged out successfully')
         JWTHelper.clear_auth_cookies(response)
-        return success_response(message='Logged out successfully')
+        return response

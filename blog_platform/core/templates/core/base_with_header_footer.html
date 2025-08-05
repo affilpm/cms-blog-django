@@ -91,12 +91,12 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
+                        {% comment %} <li class="nav-item">
                             <a class="nav-link px-3 mx-1 d-flex align-items-center text-white {% if request.path == '/users/register/' %}active{% endif %}" 
                                href="{% url 'register' %}" aria-label="Sign Up">
                                 <i class="bi bi-person-plus me-2"></i>Sign Up
                             </a>
-                        </li>
+                        </li> {% endcomment %}
                         {% endif %}
                     </ul>
                 </div>

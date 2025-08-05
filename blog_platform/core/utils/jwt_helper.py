@@ -44,9 +44,10 @@ class JWTHelper:
             payload = JWTHelper._decode_token(token)
             if payload and 'user_id' in payload:
                 return User.objects.get(id=payload['user_id'])
-        except (User.DoesNotExist, Exception):
-            pass
-        return None
+        except User.DoesNotExist:
+            return None
+        except Exception:
+            return None
     
     @staticmethod
     def refresh_tokens(refresh_token):
