@@ -11,7 +11,7 @@ function setupLogoutHandler() {
             const { response } = await post(endpoints.logout, true);
 
             if (response.ok) {
-                window.location.href = '/users/login/';
+                window.location.href = '/';
             } else {
                 alert('Logout failed');
             }
