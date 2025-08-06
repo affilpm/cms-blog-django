@@ -91,12 +91,12 @@
                             </a>
                         </li>
 
-                        {% comment %} <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link px-3 mx-1 d-flex align-items-center text-white {% if request.path == '/users/register/' %}active{% endif %}" 
                                href="{% url 'register' %}" aria-label="Sign Up">
                                 <i class="bi bi-person-plus me-2"></i>Sign Up
                             </a>
-                        </li> {% endcomment %}
+                        </li> 
                         {% endif %}
                     </ul>
                 </div>
@@ -217,6 +217,6 @@
 {% endblock%}
 
 {% block extra_js %}
-    <script type="module" src="{% static 'core_static/js/core_base.js' %}" defer></script>
+    <script type="module" src="{% static 'core_static/js/base_with_header_footer.js' %}" defer></script>
     <script type="module" src="{% static 'users_static/js/logout.js' %}" defer></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status 
-from .serializers import UserSerializer
+from .serializers import UserAuthSerializer
 from django.contrib.auth import authenticate
 from core.utils.jwt_helper import JWTHelper
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +9,7 @@ from core.utils.responses import success_response, error_response
 
 class RegistrationAPIView(APIView):
     def post(self, request):
-        serializer = UserSerializer(data = request.data)
+        serializer = UserAuthSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             return success_response(

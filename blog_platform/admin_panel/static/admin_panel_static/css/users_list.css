@@ -1,0 +1,29 @@
+.table-glass {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.table-glass th {
+    background: var(--glass-bg);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table-glass td {
+    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.table-glass tbody tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.status-published {
+    background-color: #28a745 !important;
+}
+
+.status-pending {
+    background-color: #dc3545 !important;
+}

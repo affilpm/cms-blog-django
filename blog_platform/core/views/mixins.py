@@ -33,9 +33,20 @@ class RedirectAuthenticatedUserMixin:
             
             if user:
                 if user.is_superuser or user.is_staff:
-                    return redirect('/')
+                    return redirect('admin_dashboard')
                 else:
                     return redirect('home')
         return super().dispatch(request, *args, **kwargs)
+    
+class ActiveSectionMixin:
+    active_section = None
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_section"] = self.active_section 
+        return context
+        
+    
+    
     
             

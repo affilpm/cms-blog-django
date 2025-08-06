@@ -11,7 +11,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class UserSerializer(serializers.ModelSerializer):
+class UserAuthSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only = True)
     
     class Meta:
@@ -46,5 +46,4 @@ class UserSerializer(serializers.ModelSerializer):
         user = CustomUser.objects.create_user(**validated_data)
         return user
         
-           
         

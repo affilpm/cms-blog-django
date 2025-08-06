@@ -1,0 +1,92 @@
+{% extends "core/core_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core_static/css/admin_base.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Sidebar Toggle Button -->
+    <button class="btn sidebar-toggle d-md-none" type="button" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <nav class="sidebar glass" id="sidebar">
+        <div class="sidebar-header">
+            <h2>CMS Admin</h2>
+            <p>Content Management</p>
+        </div>
+        <ul class="nav flex-column px-3">
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'posts' %}active{% endif %}" href="">
+                    <i class="fas fa-blog"></i>
+                    <span>Blog Posts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'admin_users_list' %}active{% endif %}" href="{% url 'admin_users_list' %}">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'comments' %}active{% endif %}" href="">
+                    <i class="fas fa-comments"></i>
+                    <span>Comments</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'media' %}active{% endif %}" href="">
+                    <i class="fas fa-images"></i>
+                    <span>Media</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'settings' %}active{% endif %}" href="">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <div class="glass rounded-3 p-4 mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <div class="mb-3 mb-md-0">
+                    <h1 class="text-white mb-1">Welcome, Admin</h1>
+                    <p class="text-white-50 mb-0">Manage your content and monitor your blog performance</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-success" href="{% url 'post' %}">
+                        <i class="fas fa-plus me-2"></i>New Post
+                    </a>
+                    <button class="btn btn-glass" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Block -->
+        {% block main_content %}
+        {% endblock %}
+    </main>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="module" src="{% static 'core_static/js/admin_base.js' %}" defer></script>
+    <script type="module">
+        // Pass Django URL to JavaScript for Ctrl+N navigation
+        window.createPostUrl = "{% url 'post' %}";
+    </script>
+{% endblock %}

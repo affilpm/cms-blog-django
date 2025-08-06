@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'core_static/css/comments.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<div id="comments-section" class="content-view">
+    <div class="glass rounded-3 p-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+            <h3 class="text-white mb-3 mb-md-0">Comments Management</h3>
+            <button class="btn btn-success" id="approveAllBtn">
+                <i class="fas fa-check me-2"></i>Approve All
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-glass">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Comment</th>
+                        <th>Author</th>
+                        <th>Post</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="commentsTbody">
+                    <!-- Comments will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="module" src="{% static 'core_static/js/comments.js' %}" defer></script>
+{% endblock %}
