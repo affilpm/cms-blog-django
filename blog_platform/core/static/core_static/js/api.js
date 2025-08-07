@@ -71,3 +71,23 @@ export async function postFormData(url, formData, withCredentials = false) {
     const data = await response.json();
     return { response, data };
 }
+
+export async function patchFormData(url, formData, withCredentials = false) {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+    const options = {
+        method: 'PATCH',
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+        body: formData,
+    };
+
+    if (withCredentials) {
+        options.credentials = 'include';
+    }
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return { response, data };
+}

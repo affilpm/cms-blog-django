@@ -1,0 +1,46 @@
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+    
+.auth-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+    
+.auth-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+    
+.btn-register {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+    
+.btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+    
+.requirement-check {
+    color: #198754;
+}
+    
+.requirement-cross {
+    color: #dc3545;
+}
+    
+.form-floating > .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+.btn-cancel {
+    background-color: #dc3545; /* red */
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #c82333;
+    color: #fff;
+}

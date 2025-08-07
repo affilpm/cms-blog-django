@@ -45,5 +45,32 @@ class UserAuthSerializer(serializers.ModelSerializer):
         validated_data.pop('confirm_password')
         user = CustomUser.objects.create_user(**validated_data)
         return user
+    
+class AdminUserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'first_name', 'last_name', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }  
         
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(**validated_data)
+        return user      
         
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'username', 'first_name', 'last_name', 'created_at', 'is_active', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False}
+        }
+        
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)    
+        if password:
+            instance.set_password(password)    
+        instance.save()
+        return instance    

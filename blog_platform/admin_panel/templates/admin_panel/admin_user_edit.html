@@ -1,0 +1,90 @@
+{% extends 'core/core_base.html' %}
+{% load static %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'admin_panel_static/css/admin_user_edit.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex align-items-center justify-content-center py-5" style="min-height: calc(100vh - 200px);" id="user-edit-container" data-user-id="{{ user_id }}">
+    <div class="auth-card card shadow-lg border-0 rounded-4" style="max-width: 450px; width: 100%;">
+        <div class="auth-header card-header text-white text-center py-4 rounded-top-4 border-0">
+            <h2 class="card-title h3 mb-2 fw-semibold">Join CRM Blog</h2>
+            <p class="card-text mb-0 opacity-75">Create your account to get started</p>
+        </div>
+        
+        <div class="card-body p-4">
+            <div id="errorMessage" class="alert alert-danger rounded-3 border-0 d-none"></div>
+            <div id="successMessage" class="alert alert-success rounded-3 border-0 d-none"></div>
+
+            <form id="registerForm" novalidate>
+                {% csrf_token %}
+
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="username" name="username" 
+                           placeholder="Username" required minlength="4" maxlength="30" 
+                           pattern="^[a-zA-Z0-9_.-]{4,30}$"
+                    >
+                    <label for="username">Username</label>
+                    <div class="form-text text-muted small mb-1">4-30 characters. Use letters, numbers, and _ . - only</div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control rounded-3" id="email" name="email" 
+                           placeholder="Email" required 
+                    >
+                    <label for="email">Email Address</label>
+                    <div class="form-text text-muted small mb-1">Enter a valid email address (e.g., user@example.com)</div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="first_name" name="first_name" 
+                           placeholder="First Name" required pattern="[A-Za-z]+"
+                    >
+                    <label for="first_name">First Name</label>
+                    <div class="form-text text-muted small mb-1">Letters only</div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control rounded-3" id="last_name" name="last_name" 
+                           placeholder="Last Name" required pattern="[A-Za-z]+"
+                    >
+                    <label for="last_name">Last Name</label>
+                    <div class="form-text text-muted small mb-1">Letters only</div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control rounded-3" id="password" name="password" 
+                           placeholder="Password" minlength="8"
+                           pattern="(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*[@$!%*?&]).{8,}"
+                    >
+                    <label for="password">Password</label>
+                    <div class="form-text text-muted small mb-1">At least 8 characters with uppercase, lowercase, number, and special character (@$!%*?&)</div>
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <button type="submit" class="btn btn-register btn-lg w-100 text-white fw-semibold rounded-3 mt-2">
+                    Edit Account
+                </button>
+
+                <a href="{% url 'admin_users_list' %}" 
+                    class="btn btn-cancel btn-lg w-100 text-white fw-semibold rounded-3 mt-2 d-block text-center">
+                        Cancel
+                </a>
+            </form>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+
+<script type="module" src="{% static 'admin_panel_static/js/admin_user_edit.js' %}" defer></script>
+{% endblock %}

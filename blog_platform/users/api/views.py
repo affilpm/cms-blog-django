@@ -1,11 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status 
-from .serializers import UserAuthSerializer
+from .serializers import UserAuthSerializer, AdminUserCreateSerializer, AdminUserSerializer
 from django.contrib.auth import authenticate
 from core.utils.jwt_helper import JWTHelper
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from core.utils.responses import success_response, error_response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
+from ..models import CustomUser
 
 class RegistrationAPIView(APIView):
     def post(self, request):
@@ -66,3 +69,32 @@ class LogoutAPIView(APIView):
         response = success_response(message='Logged out successfully')
         JWTHelper.clear_auth_cookies(response)
         return response
+    
+class AdminUserManagementViewSet(ModelViewSet):
+    queryset = CustomUser.objects.filter(is_superuser = False).order_by('id')
+    permission_classes = [IsAdminUser]
+    
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return AdminUserCreateSerializer
+        return AdminUserSerializer
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        display_serializer = AdminUserCreateSerializer(user)
+        return success_response(data=display_serializer.data, status_code=status.HTTP_201_CREATED)
+    
+    @action(detail=True, methods=['patch'], url_path='toggle-status')
+    def toggle_status(self, request, pk=None):
+        user = self.get_object()
+        user.is_active = not user.is_active
+        user.save()
+        return success_response(message='User status toggled')
+    
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        return success_response(message='User deleted successfully')
