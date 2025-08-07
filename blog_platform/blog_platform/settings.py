@@ -171,3 +171,6 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_SECURE': False,  # True for HTTPS
     'AUTH_COOKIE_SAMESITE': 'Lax',
 }
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

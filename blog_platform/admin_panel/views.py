@@ -27,3 +27,4 @@ class UserEditView(SuperUserRequiredMixin, TemplateView):
         context['user_id'] = self.kwargs.get('user_id')
         return context
         
+        

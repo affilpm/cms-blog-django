@@ -5,16 +5,17 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'posts_static/css/blog_create.css' %}">
+
 {% endblock %}
 
 {% block content %}
 <div class="create-post-container">
     <div class="toolbar">
-        <a href="" class="back-link">
+        <a href="{% url 'admin_dashboard' %}" class="back-link">
             <i class="bi bi-arrow-left"></i>
             Back to Posts
         </a>
-        <small class="text-muted">Draft auto-saved</small>
+        {% comment %} <small class="text-muted">Draft auto-saved</small> {% endcomment %}
     </div>
     
     <form method="post" enctype="multipart/form-data" id="postForm">
@@ -60,9 +61,10 @@
                 <div class="upload-content" id="uploadContent">
                     <div class="upload-icon">
                         <i class="bi bi-image"></i>
+
                     </div>
                     <div class="upload-text">
-                        <strong>Click to add a cover image</strong> or drag and drop
+                        <strong>Click to add a cover image (Optional)</strong> or drag and drop
                         <br><small>Recommended: 1200x630px | Max: 5MB</small>
                     </div>
                     <div class="file-type-info">
@@ -111,6 +113,56 @@
                     {{ form.content.errors.0 }}
                 </div>
             {% endif %}
+        </div>
+        
+        <!-- File Attachments Section -->
+        <div class="form-group">
+            <label class="form-label">
+                <i class="bi bi-paperclip me-1"></i>
+                File Attachments
+                <small class="text-muted">(Optional)</small>
+            </label>
+            
+        <div class="attachments-section" id="attachmentsSection">
+            <input 
+                type="file" 
+                id="attachmentInput" 
+                class="file-input" 
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar,.jpg,.jpeg,.png,.gif,.webp,.mp4,.mp3,.wav"
+                data-max-size="10485760"
+            >
+            
+            <div class="attachment-upload-area" id="attachmentUploadArea">
+                <div class="attachment-icon">
+                    <i class="bi bi-cloud-upload"></i>
+                </div>
+                <div class="upload-text" id="attachmentUploadPrompt">
+                    <strong>Click to add a file attachment</strong> or drag and drop
+                    <br><small>Max: 10MB</small>
+                </div>
+                <div class="file-type-info">
+                    Supported: Documents, Images, Videos, Audio, Archives
+                </div>
+            </div>
+            
+            <div class="attachment-preview" id="attachmentPreview" style="display: none;">
+                <div class="attachment-item">
+                    <i id="attachmentIcon" class="bi bi-file-earmark"></i>
+                    <div class="attachment-info" id="attachmentInfo" style="display: none;">
+                        <div class="attachment-name" id="attachmentName"></div>
+                        <div class="attachment-size" id="attachmentSize"></div>
+                        <div class="attachment-type" id="attachmentType"></div>
+                    </div>
+                    <div class="attachment-actions" id="attachmentActions" style="display: none;">
+                        <button id="removeAttachmentBtn" class="btn-remove-attachment">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="error-message" id="attachmentError"></div>
+            <div class="success-message" id="attachmentSuccess"></div>
         </div>
         
         <!-- Publish Section -->

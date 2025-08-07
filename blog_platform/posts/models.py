@@ -17,11 +17,34 @@ class Post(TimeStampedModel):
     title = models.CharField(max_length=255)
     content = models.TextField()
     cover_image = models.ImageField(upload_to='post_images', blank=True, null=True)
+    attachment = models.FileField(upload_to='post_attachment', blank=True, null=True)
     view_count = models.PositiveIntegerField(default=0)
     is_draft = models.BooleanField(default=False)
     
     def __str__(self):
         return self.title
+    
+    @property
+    def attachment_name(self):
+        if self.attachment:
+            return self.attachment.name.split('/')[-1]
+        return None
+    
+    @property
+    def attachment_size(self):
+        if self.attachment: 
+            try:
+                self.attachment.size
+            except:
+                return 0
+            return 0
+        
+    def get_attachment_type(self):
+        if self.attachment:
+            import mimetypes
+            mime_type, _ = mimetypes.guess_type(self.attachment.name)
+            return mime_type
+        return None        
     
     def total_likes(self):
         return self.reactions.filter(reaction_type='like').count()

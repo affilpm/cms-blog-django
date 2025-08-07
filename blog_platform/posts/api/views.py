@@ -56,8 +56,8 @@ class PostViewSet(ModelViewSet):
         return success_response(message='Published successfully', status_code=status.HTTP_201_CREATED)
     
 class CategoryView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
     def get(self, request):
         category_name = Category.objects.values('id','name')
         serializer = CategorySerializer(category_name, many=True)
-        return success_response(data=serializer)
+        return success_response(data=serializer.data)
