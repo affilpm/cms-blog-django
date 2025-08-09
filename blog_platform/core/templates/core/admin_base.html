@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if active_section == 'posts' %}active{% endif %}" href="">
+                <a class="nav-link {% if active_section == 'admin_post_list' %}active{% endif %}" href="{% url 'admin_post_list' %}">
                     <i class="fas fa-blog"></i>
                     <span>Blog Posts</span>
                 </a>
@@ -67,7 +67,7 @@
                     <p class="text-white-50 mb-0">Manage your content and monitor your blog performance</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a class="btn btn-success" href="{% url 'post' %}">
+                    <a class="btn btn-success" href="{% url 'create_post' %}">
                         <i class="fas fa-plus me-2"></i>New Post
                     </a>
                     <button class="btn btn-glass" id="logoutBtn">
@@ -87,6 +87,6 @@
     <script type="module" src="{% static 'core_static/js/admin_base.js' %}" defer></script>
     <script type="module">
         // Pass Django URL to JavaScript for Ctrl+N navigation
-        window.createPostUrl = "{% url 'post' %}";
+        window.createPostUrl = "{% url 'create_post' %}";
     </script>
 {% endblock %}

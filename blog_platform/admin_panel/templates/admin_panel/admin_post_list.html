@@ -1,7 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'core/admin_base.html' %}
+{% load static %}
 
-{% block content %}
-<div id="posts-section" class="content-view d-none">
+{% block extra_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin_panel_static/css/admin_post_list.css' %}">
+
+{% endblock %}
+{% block main_content %}
+<div id="posts-section" class="content-view">
     <div class="glass rounded-3 p-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
             <h3 class="text-white mb-3 mb-md-0">All Blog Posts</h3>
@@ -15,10 +21,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Title</th>
-                        <th>Author</th>
                         <th>Status</th>
                         <th>Views</th>
                         <th>Likes</th>
+                        <th>Unlikes</th>
                         <th>Comments</th>
                         <th>Created</th>
                         <th>Actions</th>
@@ -31,4 +37,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+{{ block.super }}
+<script type="module" src="{% static 'admin_panel_static/js/admin_post_list.js' %}" defer></script>
+
 {% endblock %}

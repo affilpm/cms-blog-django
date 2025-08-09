@@ -462,9 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data);
             if (response.ok) {
                 showSuccess(data.message || 'Draft saved successfully!');
-                if (data.redirect_url) {
-                    setTimeout(() => window.location.href = data.redirect_url, 1500);
-                }
+                window.location.href = '/admin-panel'
             } else {
                 const errorMessage = data.error || (data.details
                     ? Object.entries(data.details).map(([field, errors]) => `${field}: ${errors.join(', ')}`).join('\n')
@@ -509,9 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 showSuccess(data.message || 'Post published successfully!');
-                if (data.redirect_url || data.post_url) {
-                    setTimeout(() => window.location.href = data.redirect_url || data.post_url, 1500);
-                }
+                window.location.href = '/admin-panel'
             } else {
                 const errorMessage = data.error || (data.details
                     ? Object.entries(data.details).map(([field, errors]) => `${field}: ${errors.join(', ')}`).join('\n')

@@ -26,5 +26,10 @@ class UserEditView(SuperUserRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['user_id'] = self.kwargs.get('user_id')
         return context
+    
+@method_decorator(never_cache, name='dispatch')
+class PostListView(SuperUserRequiredMixin, ActiveSectionMixin, TemplateView):
+    template_name = 'admin_panel/admin_post_list.html'
+    active_section = 'admin_post_list'    
         
         

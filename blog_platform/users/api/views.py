@@ -21,7 +21,7 @@ class RegistrationAPIView(APIView):
                 )
         return error_response(
             message='Invalid form submission', 
-            errors=serializer.errors, 
+            error=serializer.errors, 
             status_code=status.HTTP_400_BAD_REQUEST
             )    
     
@@ -33,7 +33,7 @@ class LoginAPIView(APIView):
         if not email or not password:
             return error_response(
                 message='Invalid form submission',
-                errors='Email and password are required.',
+                error='Email and password are required.',
                 status_code=status.HTTP_400_BAD_REQUEST
             )
             
@@ -43,7 +43,7 @@ class LoginAPIView(APIView):
             if not user.is_active:
                 return error_response(
                     message='Restricted account',
-                    errors='User account is deactivated.',
+                    error='User account is deactivated.',
                     status_code=status.HTTP_403_FORBIDDEN
                 )
                             

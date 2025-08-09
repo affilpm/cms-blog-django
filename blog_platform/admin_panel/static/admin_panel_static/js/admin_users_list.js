@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadUsers();
 });
 
-// Also try to load immediately in case DOMContentLoaded already fired
 if (document.readyState === 'loading') {
     // Document still loading, wait for DOMContentLoaded
 } else {

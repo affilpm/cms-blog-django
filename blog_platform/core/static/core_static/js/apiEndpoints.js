@@ -13,6 +13,11 @@ export const endpoints = {
     category_list: '/api/posts/category/',
     create_draft: '/api/posts/post/',
     create_post: '/api/posts/post/',
+    list_post: '/api/posts/post/',
+    edit_post: (id) => `/api/posts/post/${id}/`,
+    delete_post: (id) => `/api/posts/post/${id}/`,
+    toggle_status: (id) => `/api/posts/post/${id}/toggle-status/`
+
 
 
 

@@ -53,17 +53,8 @@ class Post(TimeStampedModel):
         return self.reactions.filter(reaction_type='unlike').count()
     
     def is_published(self):
-        return self.is_draft
+        return not self.is_draft
     
-    def publish(self):
-        if self.is_draft:
-            self.is_draft = False
-            self.save()
-
-    def unpublish(self):
-        if not self.is_draft:
-            self.is_draft = True
-            self.save()    
     
 class PostReaction(TimeStampedModel):
     REACTION_CHOICES = {
