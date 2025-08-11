@@ -5,6 +5,11 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'posts_static/css/blog_create.css' %}">
+<link rel="stylesheet" href="{% static 'posts_static/css/blog_text_editor.css' %}">
+<!-- Quill Editor CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.bubble.min.css" rel="stylesheet">
+
 {% endblock %}
 
 {% block content %}
@@ -86,14 +91,87 @@
             <div class="success-message" id="imageSuccess"></div>
         </div>
         
-        <!-- Content Textarea -->
+        <!-- Rich Text Editor -->
         <div class="form-group">
-            <textarea 
-                name="content" 
-                class="content-textarea" 
-                placeholder="Tell your story..." 
-                required
-            ></textarea>
+            <div class="editor-container" id="editorContainer">
+                <div id="editor-toolbar">
+                    <span class="ql-formats">
+                        <select class="ql-header">
+                            <option selected></option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                        </select>
+                        <select class="ql-size">
+                            <option value="small"></option>
+                            <option selected></option>
+                            <option value="large"></option>
+                            <option value="huge"></option>
+                        </select>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <button class="ql-bold" title="Bold"></button>
+                        <button class="ql-italic" title="Italic"></button>
+                        <button class="ql-underline" title="Underline"></button>
+                        <button class="ql-strike" title="Strike"></button>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <select class="ql-color" title="Text Color"></select>
+                        <select class="ql-background" title="Background Color"></select>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered" title="Numbered List"></button>
+                        <button class="ql-list" value="bullet" title="Bullet List"></button>
+                        <button class="ql-indent" value="-1" title="Decrease Indent"></button>
+                        <button class="ql-indent" value="+1" title="Increase Indent"></button>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <button class="ql-script" value="sub" title="Subscript"></button>
+                        <button class="ql-script" value="super" title="Superscript"></button>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <button class="ql-blockquote" title="Quote"></button>
+                        <button class="ql-code-block" title="Code Block"></button>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <button class="ql-link" title="Link"></button>
+                        <button class="ql-image" title="Image"></button>
+                        <button class="ql-video" title="Video"></button>
+                    </span>
+                    
+                    <span class="ql-formats">
+                        <button class="ql-clean" title="Clear Formatting"></button>
+                    </span>
+                    
+                    <div class="editor-actions">
+                        <button type="button" class="fullscreen-toggle" id="fullscreenToggle" title="Toggle Fullscreen">
+                            <i class="bi bi-arrows-fullscreen"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="editor"></div>
+                
+                <div class="editor-footer">
+                    <div class="word-count">
+                        <span><strong>Words:</strong> <span id="wordCount">0</span></span>
+                        <span><strong>Characters:</strong> <span id="charCount">0</span></span>
+                    </div>
+                    <div class="reading-time">
+                        <i class="bi bi-clock"></i>
+                        <span id="readingTime">0 min read</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hidden textarea for form submission -->
+            <textarea name="content" id="hiddenContent" style="display: none;" required></textarea>
         </div>
         
         <!-- File Attachments Section -->
@@ -165,8 +243,12 @@
         </div>
     </form>
 </div>
+
+
 {% endblock %}
 
 {% block extra_js %}
+<!-- Quill Editor JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
 <script type="module" src="{% static 'posts_static/js/blog_create.js' %}" defer></script>
 {% endblock %}

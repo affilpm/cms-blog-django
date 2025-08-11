@@ -4,7 +4,6 @@ import { endpoints } from "/static/core_static/js/apiEndpoints.js";
 document.addEventListener('DOMContentLoaded', () => {
     const elements = {
         titleInput: document.querySelector('.title-input'),
-        contentTextarea: document.querySelector('.content-textarea'),
         categorySelect: document.querySelector('.category-select'),
         coverImageInput: document.getElementById('coverImageInput'),
         imagePreview: document.getElementById('imagePreview'),
@@ -20,16 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
         attachmentInfo: document.getElementById('attachmentInfo'),
         attachmentActions: document.getElementById('attachmentActions'),
         removeAttachmentBtn: document.getElementById('removeAttachmentBtn'),
-        attachmentUploadPrompt: document.getElementById('attachmentUploadPrompt')
+        attachmentUploadPrompt: document.getElementById('attachmentUploadPrompt'),
+        hiddenContent: document.getElementById('hiddenContent'),
+        editorContainer: document.getElementById('editorContainer'),
+        fullscreenToggle: document.getElementById('fullscreenToggle')
     };
 
     const postId = document.getElementById('postForm')?.dataset.postId;
 
     const requiredElements = {
         titleInput: '.title-input',
-        contentTextarea: '.content-textarea',
         categorySelect: '.category-select',
-        editBtn: '#editBtn'
+        editBtn: '#editBtn',
+        hiddenContent: '#hiddenContent'
     };
 
     const missingElements = Object.entries(requiredElements)
@@ -40,6 +42,162 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Missing required elements:', missingElements);
         alert(`Page initialization failed. Missing elements: ${missingElements.join(', ')}`);
         return;
+    }
+
+    // Rich Text Editor Setup
+    let quill = null;
+    let isFullscreen = false;
+
+    // Initialize Quill Editor
+    function initializeEditor() {
+        if (!window.Quill) {
+            console.error('Quill library not loaded');
+            return;
+        }
+
+        // Custom toolbar configuration
+        const toolbarOptions = {
+            container: '#editor-toolbar',
+            handlers: {
+                'image': imageHandler
+            }
+        };
+
+        quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: toolbarOptions,
+                history: {
+                    delay: 2000,
+                    maxStack: 500,
+                    userOnly: true
+                }
+            },
+            placeholder: 'Tell your story...',
+            scrollingContainer: '#editor',
+        });
+
+        // Set up editor event listeners
+        quill.on('text-change', () => {
+            updateWordCount();
+            updateHiddenContent();
+        });
+
+        quill.on('selection-change', (range, oldRange, source) => {
+            if (range) {
+                elements.editorContainer?.classList.add('focused');
+            } else {
+                elements.editorContainer?.classList.remove('focused');
+            }
+        });
+
+        // Custom image handler
+        function imageHandler() {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const range = quill.getSelection();
+                        quill.insertEmbed(range.index, 'image', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            input.click();
+        }
+
+        // Fullscreen functionality
+        if (elements.fullscreenToggle) {
+            elements.fullscreenToggle.addEventListener('click', toggleFullscreen);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 's':
+                        e.preventDefault();
+                        updatePost();
+                        break;
+                    case 'Enter':
+                        if (e.shiftKey) {
+                            e.preventDefault();
+                            updatePost();
+                        }
+                        break;
+                    case 'F11':
+                        e.preventDefault();
+                        toggleFullscreen();
+                        break;
+                }
+            }
+            if (e.key === 'Escape' && isFullscreen) {
+                toggleFullscreen();
+            }
+        });
+
+        updateWordCount();
+    }
+
+    function toggleFullscreen() {
+        isFullscreen = !isFullscreen;
+        
+        if (isFullscreen) {
+            elements.editorContainer.classList.add('editor-fullscreen');
+            elements.fullscreenToggle.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+            elements.fullscreenToggle.title = 'Exit Fullscreen';
+            document.body.style.overflow = 'hidden';
+        } else {
+            elements.editorContainer.classList.remove('editor-fullscreen');
+            elements.fullscreenToggle.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+            elements.fullscreenToggle.title = 'Toggle Fullscreen';
+            document.body.style.overflow = '';
+        }
+    }
+
+    function updateWordCount() {
+        if (!quill) return;
+
+        const text = quill.getText().trim();
+        const wordCount = text ? text.split(/\s+/).length : 0;
+        const charCount = text.length;
+        const readingTime = Math.ceil(wordCount / 200); // Average reading speed: 200 words per minute
+
+        const wordCountEl = document.getElementById('wordCount');
+        const charCountEl = document.getElementById('charCount');
+        const readingTimeEl = document.getElementById('readingTime');
+
+        if (wordCountEl) wordCountEl.textContent = wordCount.toLocaleString();
+        if (charCountEl) charCountEl.textContent = charCount.toLocaleString();
+        if (readingTimeEl) readingTimeEl.textContent = `${readingTime} min read`;
+    }
+
+    function updateHiddenContent() {
+        if (!quill || !elements.hiddenContent) return;
+        
+        // Get HTML content from editor and store in hidden textarea
+        const htmlContent = quill.root.innerHTML;
+        elements.hiddenContent.value = htmlContent;
+    }
+
+    function getPlainTextContent() {
+        return quill ? quill.getText().trim() : '';
+    }
+
+    function getHtmlContent() {
+        return quill ? quill.root.innerHTML : '';
+    }
+
+    function setEditorContent(htmlContent) {
+        if (quill && htmlContent) {
+            quill.root.innerHTML = htmlContent;
+            updateWordCount();
+            updateHiddenContent();
+        }
     }
 
     const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
@@ -76,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initializeForm() {
         autoResize(elements.titleInput);
-        autoResize(elements.contentTextarea);
         updateCharCount();
 
         elements.titleInput?.addEventListener('input', () => {
@@ -84,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCharCount();
         });
 
-        elements.contentTextarea?.addEventListener('input', () => autoResize(elements.contentTextarea));
         elements.coverImageInput?.addEventListener('change', handleImageChange);
         elements.removeImageBtn?.addEventListener('click', removeImage);
         elements.attachmentInput?.addEventListener('change', handleAttachmentChange);
@@ -96,6 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const postForm = document.getElementById('postForm');
         postForm?.addEventListener('submit', e => e.preventDefault());
+
+        // Initialize the rich text editor
+        initializeEditor();
 
         if (postId) {
             fetchPostData(postId);
@@ -139,9 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCharCount();
         }
 
-        if (elements.contentTextarea && postData.content) {
-            elements.contentTextarea.value = postData.content;
-            autoResize(elements.contentTextarea);
+        // Set editor content instead of textarea
+        if (postData.content && quill) {
+            setEditorContent(postData.content);
         }
 
         if (elements.categorySelect && postData.category?.id) {
@@ -281,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.imagePreview.src = src;
             elements.imagePreview.style.setProperty('display', 'block', 'important');
             elements.imagePreview.onerror = () => {
-                // showError('Failed to display image preview');
                 elements.imagePreview.style.setProperty('display', 'none', 'important');
             };
         }
@@ -349,33 +507,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (attachmentIcon) {
             attachmentIcon.className = `${fileTypeInfo.icon} ${fileTypeInfo.class}`;
-        } else {
-            console.warn('attachmentIcon element not found');
         }
 
         if (attachmentName) {
             attachmentName.textContent = file.name || 'Unknown File';
             attachmentName.style.setProperty('display', 'block', 'important');
-        } else {
-            console.warn('attachmentName element not found');
         }
 
         if (attachmentSize) {
             attachmentSize.textContent = formatFileSize(file.size);
-        } else {
-            console.warn('attachmentSize element not found');
         }
 
         if (attachmentType) {
             attachmentType.textContent = fileTypeInfo.name;
-        } else {
-            console.warn('attachmentType element not found');
         }
 
-        // Force DOM update to ensure visibility
         setTimeout(() => {
-            if (attachmentInfo) {
-                attachmentInfo.style.setProperty('display', 'block', 'important');
+            if (elements.attachmentInfo) {
+                elements.attachmentInfo.style.setProperty('display', 'block', 'important');
             }
             if (attachmentName) {
                 attachmentName.style.setProperty('display', 'block', 'important');
@@ -467,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function hasDataChanged() {
         const currentTitle = elements.titleInput?.value.trim() || '';
-        const currentContent = elements.contentTextarea?.value.trim() || '';
+        const currentContent = getHtmlContent();
         const currentCategory = elements.categorySelect?.value || '';
 
         const titleChanged = currentTitle !== originalValues.title;
@@ -484,7 +633,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function validateForm() {
         const errors = [];
         const title = elements.titleInput?.value.trim() || '';
-        const content = elements.contentTextarea?.value.trim() || '';
+        const content = getPlainTextContent();
         const category = elements.categorySelect?.value || '';
 
         if (!title) errors.push('Title is required');
@@ -548,11 +697,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Ensure content is updated before submission
+        updateHiddenContent();
+
         const formData = new FormData();
         let hasChanges = false;
 
         const currentTitle = elements.titleInput.value.trim();
-        const currentContent = elements.contentTextarea.value.trim();
+        const currentContent = getHtmlContent();
         const currentCategory = elements.categorySelect.value;
 
         if (currentTitle !== originalValues.title) {
