@@ -4,11 +4,11 @@
 {% block title %}Create New Post{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'posts_static/css/blog_create.css' %}">
-<link rel="stylesheet" href="{% static 'posts_static/css/blog_text_editor.css' %}">
+<link rel="stylesheet" href="{% static 'posts_static/css/post_create.css' %}">
+<link rel="stylesheet" href="{% static 'posts_static/css/post_text_editor.css' %}">
 <!-- Quill Editor CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.bubble.min.css" rel="stylesheet">
+{% comment %} <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.bubble.min.css" rel="stylesheet"> {% endcomment %}
 
 {% endblock %}
 
@@ -250,5 +250,5 @@
 {% block extra_js %}
 <!-- Quill Editor JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
-<script type="module" src="{% static 'posts_static/js/blog_create.js' %}" defer></script>
+<script type="module" src="{% static 'posts_static/js/post_create.js' %}" defer></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 import { post, get } from "/static/core_static/js/api.js";
 
 // Get postId from the template
-const postId = window.postId ; // fallback for testing
+const postId = window.postId ; 
 
 // Like functionality
 async function fetchLikeStatus() {
@@ -127,16 +127,15 @@ async function fetchComments() {
         if (commentsListElement) commentsListElement.innerHTML = '';
         if (noCommentsElement) noCommentsElement.style.display = 'none';
 
-        // Fixed: Use query parameter instead of URL path parameter
         const {response, data} = await get(`/api/posts/comments/?post=${postId}`);
-console.log(data)
+
         if (response.ok) {
             // Handle both possible response structures
-            const comments = data.results || data.data || data || [];
+            const comments = data || [];
             
             if (commentCountElement) {
                 // If using pagination, use the count from response, otherwise use array length
-                const totalCount = data.count !== undefined ? data.count : comments.length;
+                const totalCount = comments.length;
                 commentCountElement.textContent = totalCount;
             }
 
@@ -168,11 +167,11 @@ function renderComments(comments) {
     if (!commentsListElement) return;
 
     const commentsHTML = comments.map(comment => {
-        // Updated to match your UserCommentSerializer field structure
-        const authorName = comment.user || comment.author?.username || 'Anonymous';
+
+        const authorName = comment.user;
         const initials = getInitials(authorName);
         const commentDate = formatDate(comment.created_at);
-        const isOwn = comment.user?.id === window.currentUserId; // Assuming you set this globally
+        const isOwn = comment.user?.id === window.currentUserId; 
         const isPending = !comment.is_approved;
         
         return `
@@ -320,22 +319,6 @@ function initializeCommentForm() {
     }
 }
 
-// View count update
-async function updateViewCount() {
-    try {
-        const {response, data} = await post(`/api/posts/${postId}/view/`);
-        
-        if (response.ok && data.data?.view_count) {
-            const viewCountElement = document.getElementById('view-count');
-            if (viewCountElement) {
-                viewCountElement.textContent = data.data.view_count;
-            }
-        }
-    } catch (err) {
-        console.error('Error updating view count:', err);
-        // Don't show toast for view count errors as it's not critical
-    }
-}
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -346,9 +329,6 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchComments();
     initializeCommentForm();
     
-    // Update view count
-    updateViewCount();
-
     // Add event listeners
     const likeBtn = document.querySelector('.like-button');
     if (likeBtn) {

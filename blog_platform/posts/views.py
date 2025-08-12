@@ -6,11 +6,11 @@ from django.views.generic import TemplateView
 
 @method_decorator(never_cache, name='dispatch')  
 class PostCreateView(SuperUserRequiredMixin, TemplateView):
-    template_name = 'posts/blog_create.html'
+    template_name = 'posts/post_create.html'
     
 @method_decorator(never_cache, name='dispatch')    
 class PostEditView(SuperUserRequiredMixin, TemplateView):
-    template_name = 'posts/blog_edit.html'
+    template_name = 'posts/post_edit.html'
      
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
