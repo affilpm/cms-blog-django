@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // DOM elements with null checks
     const elements = {
         titleInput: document.querySelector('.title-input'),
-        contentTextarea: document.querySelector('.content-textarea'),
         categorySelect: document.querySelector('.category-select'),
         coverImageInput: document.getElementById('coverImageInput'),
         imagePreview: document.getElementById('imagePreview'),
@@ -22,15 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
         attachmentInfo: document.getElementById('attachmentInfo'),
         attachmentActions: document.getElementById('attachmentActions'),
         removeAttachmentBtn: document.getElementById('removeAttachmentBtn'),
-        attachmentUploadPrompt: document.getElementById('attachmentUploadPrompt')
+        attachmentUploadPrompt: document.getElementById('attachmentUploadPrompt'),
+        hiddenContent: document.getElementById('hiddenContent'),
+        editorContainer: document.getElementById('editorContainer'),
+        fullscreenToggle: document.getElementById('fullscreenToggle')
     };
 
     // Validate required elements
     const requiredElements = {
         titleInput: '.title-input',
-        contentTextarea: '.content-textarea',
         categorySelect: '.category-select',
-        publishBtn: '#publishBtn'
+        publishBtn: '#publishBtn',
+        hiddenContent: '#hiddenContent'
     };
 
     const missingElements = Object.entries(requiredElements)
@@ -41,6 +43,154 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Missing required elements:', missingElements);
         alert(`Page initialization failed. Missing elements: ${missingElements.join(', ')}`);
         return;
+    }
+
+    // Rich Text Editor Setup
+    let quill = null;
+    let isFullscreen = false;
+
+    // Initialize Quill Editor
+    function initializeEditor() {
+        if (!window.Quill) {
+            console.error('Quill library not loaded');
+            return;
+        }
+
+        // Custom toolbar configuration
+        const toolbarOptions = {
+            container: '#editor-toolbar',
+            handlers: {
+                'image': imageHandler
+            }
+        };
+
+        quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: toolbarOptions,
+                history: {
+                    delay: 2000,
+                    maxStack: 500,
+                    userOnly: true
+                }
+            },
+            placeholder: 'Tell your story...',
+            scrollingContainer: '#editor',
+        });
+
+        // Set up editor event listeners
+        quill.on('text-change', () => {
+            updateWordCount();
+            updateHiddenContent();
+        });
+
+        quill.on('selection-change', (range, oldRange, source) => {
+            if (range) {
+                elements.editorContainer.classList.add('focused');
+            } else {
+                elements.editorContainer.classList.remove('focused');
+            }
+        });
+
+        // Custom image handler
+        function imageHandler() {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const range = quill.getSelection();
+                        quill.insertEmbed(range.index, 'image', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            input.click();
+        }
+
+        // Fullscreen functionality
+        if (elements.fullscreenToggle) {
+            elements.fullscreenToggle.addEventListener('click', toggleFullscreen);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 's':
+                        e.preventDefault();
+                        saveDraft();
+                        break;
+                    case 'Enter':
+                        if (e.shiftKey) {
+                            e.preventDefault();
+                            publishPost();
+                        }
+                        break;
+                    case 'F11':
+                        e.preventDefault();
+                        toggleFullscreen();
+                        break;
+                }
+            }
+            if (e.key === 'Escape' && isFullscreen) {
+                toggleFullscreen();
+            }
+        });
+
+        updateWordCount();
+    }
+
+    function toggleFullscreen() {
+        isFullscreen = !isFullscreen;
+        
+        if (isFullscreen) {
+            elements.editorContainer.classList.add('editor-fullscreen');
+            elements.fullscreenToggle.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+            elements.fullscreenToggle.title = 'Exit Fullscreen';
+            document.body.style.overflow = 'hidden';
+        } else {
+            elements.editorContainer.classList.remove('editor-fullscreen');
+            elements.fullscreenToggle.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+            elements.fullscreenToggle.title = 'Toggle Fullscreen';
+            document.body.style.overflow = '';
+        }
+    }
+
+    function updateWordCount() {
+        if (!quill) return;
+
+        const text = quill.getText().trim();
+        const wordCount = text ? text.split(/\s+/).length : 0;
+        const charCount = text.length;
+        const readingTime = Math.ceil(wordCount / 200); // Average reading speed: 200 words per minute
+
+        const wordCountEl = document.getElementById('wordCount');
+        const charCountEl = document.getElementById('charCount');
+        const readingTimeEl = document.getElementById('readingTime');
+
+        if (wordCountEl) wordCountEl.textContent = wordCount.toLocaleString();
+        if (charCountEl) charCountEl.textContent = charCount.toLocaleString();
+        if (readingTimeEl) readingTimeEl.textContent = `${readingTime} min read`;
+    }
+
+    function updateHiddenContent() {
+        if (!quill || !elements.hiddenContent) return;
+        
+        // Get HTML content from editor and store in hidden textarea
+        const htmlContent = quill.root.innerHTML;
+        elements.hiddenContent.value = htmlContent;
+    }
+
+    function getPlainTextContent() {
+        return quill ? quill.getText().trim() : '';
+    }
+
+    function getHtmlContent() {
+        return quill ? quill.root.innerHTML : '';
     }
 
     // File validation constants
@@ -77,10 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.titleInput.addEventListener('input', handleTitleInput);
         }
 
-        if (elements.contentTextarea) {
-            elements.contentTextarea.addEventListener('input', handleContentInput);
-        }
-
         if (elements.coverImageInput) {
             elements.coverImageInput.addEventListener('change', handleImageChange);
         }
@@ -113,6 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
             postForm.addEventListener('submit', e => e.preventDefault());
         }
 
+        // Initialize the rich text editor
+        initializeEditor();
         fetchCategories();
     }
 
@@ -142,14 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Title and content handling
+    // Title handling
     function handleTitleInput() {
         autoResize(this);
         updateCharCount();
-    }
-
-    function handleContentInput() {
-        // Content input handling (placeholder for future functionality)
     }
 
     function autoResize(element) {
@@ -373,7 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Form validation
     function validateForm(isDraft = false) {
         const title = elements.titleInput?.value.trim() || '';
-        const content = elements.contentTextarea?.value.trim() || '';
+        const content = getPlainTextContent();
         const category = elements.categorySelect?.value || '';
 
         const errors = [];
@@ -435,11 +579,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save and publish
     async function saveDraft() {
-        const errors = validateForm(false); 
+        const errors = validateForm(true); 
         if (errors.length > 0) {
             alert(`Please fix the following errors:\n\n${errors.join('\n')}`);
             return;
         }
+
+        // Ensure content is updated before submission
+        updateHiddenContent();
 
         const postForm = document.getElementById('postForm');
         if (!postForm) {
@@ -485,6 +632,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Please fix the following errors:\n\n${errors.join('\n')}`);
             return;
         }
+
+        // Ensure content is updated before submission
+        updateHiddenContent();
 
         const postForm = document.getElementById('postForm');
         if (!postForm) {
@@ -579,6 +729,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Auto-save functionality (optional)
+    let autoSaveInterval;
+    function startAutoSave() {
+        clearInterval(autoSaveInterval);
+        autoSaveInterval = setInterval(() => {
+            if (quill && getPlainTextContent().length > 50) {
+                // Auto-save only if there's substantial content
+                saveDraft();
+            }
+        }, 60000); // Auto-save every 60 seconds
+    }
+
     // Start initialization
     initializeForm();
+    
+    // Optional: Start auto-save
+    // startAutoSave();
 });

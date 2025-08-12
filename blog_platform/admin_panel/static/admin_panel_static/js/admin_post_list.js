@@ -92,7 +92,6 @@ async function loadAllPosts() {
                 </span></td>
                 <td>${post.view_count}</td>
                 <td>${post.like_count}</td>
-                <td>${post.unlike_count}</td>
                 <td>${post.comment_count}</td>
                 <td>${formatDate(post.created_at)}</td>
                 <td>
@@ -103,9 +102,9 @@ async function loadAllPosts() {
                         <button class="btn btn-outline-danger btn-sm" onclick="deletePost(${post.id})" title="Delete">
                             <i class="fas fa-trash"></i>
                         </button>
-                        <button class="btn btn-outline-info btn-sm" onclick="viewPost(${post.id})" title="View">
+                        <a class="btn btn-outline-info btn-sm" href="/admin-panel/post-detail/${post.id}/"  title="View">
                             <i class="fas fa-eye"></i>
-                        </button>
+                        </a>
                         <button class="btn btn-outline-warning btn-sm" onclick="toggleDraft(${post.id}, ${post.is_draft})" title="Toggle Draft">
                             <i class="fas fa-toggle-${post.is_draft ? 'on' : 'off'}"></i>
                         </button>

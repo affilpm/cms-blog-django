@@ -85,6 +85,7 @@
 
 {% block extra_js %}
     <script type="module" src="{% static 'core_static/js/admin_base.js' %}" defer></script>
+    <script type="module" src="{% static 'users_static/js/logout.js' %}" defer></script>
     <script type="module">
         // Pass Django URL to JavaScript for Ctrl+N navigation
         window.createPostUrl = "{% url 'create_post' %}";

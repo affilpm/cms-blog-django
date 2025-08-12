@@ -1,0 +1,145 @@
+{% extends 'core/core_base.html'%}
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'admin_panel_static/css/admin_post_detail.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+    <a class="sticky-back-button" href="{% url 'admin_post_list' %}">
+        <i class="fas fa-arrow-left"></i>
+        <span>BACK</span>
+    </a>
+
+    <div class="container">
+        <!-- Cover Image Section -->
+        <div class="cover-image-section">
+            {% if post.cover_image %}
+            <img src="{{ post.cover_image.url }}" alt="Post Cover" class="cover-image">
+            {% endif %}
+            
+            <div class="cover-overlay">
+                <h1 class="post-title">{{ post.title }}</h1>
+                <div class="post-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-user"></i>
+                        <span>{{ post.author.username|default:"admin" }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ post.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-folder"></i>
+                        <span>{{ post.category.name }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-eye"></i>
+                        <span id="view-count">{{ post.view_count }}</span> views
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <div class="post-content">
+                {{ post.content|safe|default:"<h2>Welcome to this amazing blog post!</h2><p>This is a sample paragraph that demonstrates how your Quill editor content will be displayed. The content maintains all the rich formatting including <strong>bold text</strong>, <em>italic text</em>, and other styling.</p><blockquote>This is a sample quote that shows how blockquotes will appear in your blog posts.</blockquote><p>You can include lists, images, and all other Quill formatting options here. The styling is designed to make your content look professional and readable.</p>" }}
+            </div>
+        </div>
+
+        <!-- Like Section -->
+        <div class="like-section">
+            <div class="like-container">
+                <button class="like-button" disabled>
+                    <i class="far fa-heart"></i>
+                    <span>Like</span>
+                </button>
+                <span class="like-count">
+                    <span id="like-count">{{ post.total_likes }}</span> people liked this post
+                </span>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <div class="comments-header">
+                <i class="fas fa-comments"></i>
+                <span>Comments (<span id="comment-count">0</span>)</span>
+            </div>
+
+            <!-- Comment Form -->
+            <div class="comment-form">
+                <div class="comment-form-header">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="form-title">Share your thoughts</span>
+                </div>
+                <textarea placeholder="Write your comment here..." id="comment-text" rows="4"></textarea>
+                <div class="comment-form-actions">
+                    <button class="comment-cancel" type="button">Cancel</button>
+                    <button class="comment-submit" type="button">
+                        <i class="fas fa-paper-plane"></i>
+                        Post Comment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comments Loading State -->
+            <div class="comments-loading" id="comments-loading">
+                <div class="loading-spinner"></div>
+                <span>Loading comments...</span>
+            </div>
+
+            <!-- Comments List -->
+            <div class="comments-list" id="comments-list">
+                <!-- Comments will be loaded here dynamically -->
+            </div>
+
+            <!-- No Comments State -->
+            <div class="no-comments" id="no-comments" style="display: none;">
+                <div class="no-comments-icon">
+                    <i class="far fa-comment-dots"></i>
+                </div>
+                <h3>No comments yet</h3>
+                <p>Be the first to share your thoughts about this post!</p>
+            </div>
+        </div>
+
+        <!-- Attachment Section -->
+        {% if post.attachment %}
+        <div class="attachment-section">
+            <div class="attachment-title">
+                <i class="fas fa-paperclip"></i>
+                <span>Attachment</span>
+            </div>
+            <div class="attachment-item">
+                <div class="attachment-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="attachment-info">
+                    <div class="attachment-name">{{ post.attachment.name }}</div>
+                    <div class="attachment-size">{{ post.attachment.size|filesizeformat }}</div>
+                </div>
+                <a href="{{ post.attachment.url }}" class="download-btn" download>
+                    <i class="fas fa-download"></i>
+                    Download
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Pass the post ID to JavaScript -->
+<script>
+    window.postId = {{ post.id }};
+</script>
+<script type="module" src="{% static 'admin_panel_static/js/admin_post_detail.js' %}" defer></script>
+{% endblock %}

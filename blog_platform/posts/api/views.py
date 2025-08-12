@@ -1,14 +1,16 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from ..models import Post, Category
-from .serializers import PostSerializer, CategorySerializer
+from ..models import Post, Category, Comment
+from .serializers import PostSerializer, CategorySerializer, UserCommentSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework.generics import ListCreateAPIView
 from core.utils.responses import success_response, error_response
 import logging
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 logger = logging.getLogger('posts')
 
@@ -17,60 +19,57 @@ class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAdminUser]
     
-    def get_queryset(self):
-        """Override to ensure we always get fresh data"""
-        return Post.objects.select_related('category', 'author').all()
-    
-    def retrieve(self, request, *args, **kwargs):
-        """
-        Override retrieve to ensure proper data fetching
-        """
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-    
     def perform_create(self, serializer):
+        """
+        Save a new post with the request user as author
+        """        
         serializer.save(author=self.request.user)
         
     def create(self, request, *args, **kwargs):
         """
-        Override create to handle form data
-        """    
+        Handle post creation, including form data normalization
+        """
         data = request.data.copy()
         if 'category' in data:
             data['category_id'] = data['category']
             data.pop('category', None)
         if 'is_draft' in data:
             data['is_draft'] = data['is_draft'].lower() == 'true'
+            
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        post = serializer.instance
-        response_data = {
-            'id': post.id,
-        }
         
+        post = serializer.instance
         message = 'Draft saved successfully' if post.is_draft else 'Post published successfully'
+        response_data = { 'id': post.id }
         return success_response(message=message, data=response_data, status_code=status.HTTP_201_CREATED)
     
     def update(self, request, *args, **kwargs):
+        """
+        Update post instance with partial data
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
-        if serializer.is_valid():
-            self.perform_update(serializer)
-            return success_response(message='Post updated successfully')
-        else:
-            return error_response(message='Validation failed', error=serializer.errors)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return success_response(message='Post updated successfully')
 
                 
     @action(detail=True, methods=['patch'], url_path='toggle-status')
     def toggle_status(self, request, pk=None):
+        """
+        Toggle the draft status of the specified post
+        """
         post = self.get_object()
         post.is_draft = not post.is_draft
         post.save()
         return success_response(message='Post status updated successfully.')
     
     def destroy(self, request, *args, **kwargs):
+        """
+        Delete the specified post
+        """
         post = self.get_object()
         post.delete()
         return success_response(message='Post deleted successfully.')
@@ -82,3 +81,73 @@ class CategoryView(APIView):
         category_name = Category.objects.values('id','name')
         serializer = CategorySerializer(category_name, many=True)
         return success_response(data=serializer.data)
+    
+class PostLIkeStatusAPIView(APIView):
+    """
+    Handles retrieving like status and toggling like for a post.
+    GET: Retrieve total likes and if current user liked the post.
+    POST: Toggle like/unlike for the current user.
+    """
+    permission_classes = [IsAdminUser]
+    
+    def get_post(self, pk):
+        return get_object_or_404(Post.objects.prefetch_related('reactions'), pk=pk)
+    
+    def get(self, request, pk):
+        post = self.get_post(pk)
+        total_likes = post.reactions.count()
+        is_liked = post.reactions.filter(user=request.user).exists()
+        return success_response(data={
+            'post_id': post.id,
+            'total_likes': total_likes,
+            'is_liked': is_liked,
+        })
+        
+    def post(self, request, pk):
+        post = self.get_post(pk)
+        user = request.user
+        
+        liked = post.reactions.filter(user=user).exists()
+        if liked:
+            post.reactions.filter(user=user).delete()
+            is_liked = False
+            message = "Post unliked."
+        else:
+            post.reactions.create(user=user)
+            is_liked = True
+            message = "Post liked."
+            
+        total_likes = post.reactions.count()
+        print(total_likes)
+        return success_response(
+            message=message,
+            data={
+                "post_id": post.id,
+                "total_likes": total_likes,
+                "is_liked": is_liked
+            }
+        )        
+                    
+        
+        
+        
+class UserCommentListCreateView(ListCreateAPIView):
+    """
+    List approved comments and current user's comments for a post.
+    Also allows the user to create new comments.
+    """
+    serializer_class = UserCommentSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        post_id = self.request.query_params.get('post')
+        if not post_id:
+            return Comment.objects.none()
+        
+        # Approved comments for the post + current user's own comments (pending or approved)
+        return Comment.objects.filter(
+            post_id=post_id
+        ).filter(
+            Q(is_approved=True) | Q(user=user)
+        ).select_related('user').order_by('-created_at')

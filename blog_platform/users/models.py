@@ -14,4 +14,4 @@ class CustomUser(AbstractUser, TimeStampedModel):
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
     
     def __str__(self):
-        return self.email
+        return self.username
