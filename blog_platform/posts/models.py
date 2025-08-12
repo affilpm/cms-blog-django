@@ -47,35 +47,27 @@ class Post(TimeStampedModel):
         return None        
     
     def total_likes(self):
-        return self.reactions.filter(reaction_type='like').count()
-    
-    def total_unlikes(self):
-        return self.reactions.filter(reaction_type='unlike').count()
+        return self.reactions.count()
     
     def is_published(self):
         return not self.is_draft
     
     
 class PostReaction(TimeStampedModel):
-    REACTION_CHOICES = {
-        ('like', 'Like'),
-        ('unlike', 'Unlike')
-    }    
-    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
-    reaction_type = models.CharField(max_length=10, choices=REACTION_CHOICES)
     
     class Meta:
         unique_together = ('user', 'post')
         
     def __str__(self):
-        return f"{self.user} {self.reaction_type}d {self.post}"        
+        return f"{self.user} liked {self.post}"        
 
 class Comment(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     content = models.TextField()
+    is_approved = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.user.username} on {self.post.title}"

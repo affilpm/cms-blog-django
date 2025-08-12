@@ -83,10 +83,12 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 shadow-sm card-hover border-0">
                     <div class="position-relative">
-                        <img src="https://picsum.photos/400/250?random=1" 
-                             class="card-img-top" 
-                             alt="Featured Post"
-                             style="height: 200px; object-fit: cover;">
+                        <!-- Image container with fixed aspect ratio -->
+                        <div class="ratio ratio-16x9">
+                            <img src="https://picsum.photos/400/250?random=1" 
+                                 class="card-img-top rounded-top object-fit-cover" 
+                                 alt="Featured Post">
+                        </div>
                         <span class="position-absolute top-0 start-0 badge bg-primary m-2">TECHNOLOGY</span>
                     </div>
                     <div class="card-body d-flex flex-column">
@@ -115,10 +117,12 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 shadow-sm card-hover border-0">
                     <div class="position-relative">
-                        <img src="https://picsum.photos/400/250?random=2" 
-                             class="card-img-top" 
-                             alt="Featured Post"
-                             style="height: 200px; object-fit: cover;">
+                        <!-- Image container with fixed aspect ratio -->
+                        <div class="ratio ratio-16x9">
+                            <img src="https://picsum.photos/400/250?random=2" 
+                                 class="card-img-top rounded-top object-fit-cover" 
+                                 alt="Featured Post">
+                        </div>
                         <span class="position-absolute top-0 start-0 badge bg-success m-2">LIFESTYLE</span>
                     </div>
                     <div class="card-body d-flex flex-column">
@@ -147,10 +151,12 @@
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 shadow-sm card-hover border-0">
                     <div class="position-relative">
-                        <img src="https://picsum.photos/400/250?random=3" 
-                             class="card-img-top" 
-                             alt="Featured Post"
-                             style="height: 200px; object-fit: cover;">
+                        <!-- Image container with fixed aspect ratio -->
+                        <div class="ratio ratio-16x9">
+                            <img src="https://picsum.photos/400/250?random=3" 
+                                 class="card-img-top rounded-top object-fit-cover" 
+                                 alt="Featured Post">
+                        </div>
                         <span class="position-absolute top-0 start-0 badge bg-info m-2">TRAVEL</span>
                     </div>
                     <div class="card-body d-flex flex-column">
@@ -194,15 +200,17 @@
             <!-- Recent Post 1 -->
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://picsum.photos/200/150?random=4" 
-                                 class="img-fluid rounded-start h-100" 
-                                 alt="Recent Post"
-                                 style="object-fit: cover;">
+                    <div class="row g-0 h-100">
+                        <!-- Fixed image container for horizontal layout -->
+                        <div class="col-4">
+                            <div class="h-100" style="min-height: 140px;">
+                                <img src="https://picsum.photos/200/150?random=4" 
+                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
+                                     alt="Recent Post">
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
+                        <div class="col-8">
+                            <div class="card-body h-100 d-flex flex-column">
                                 <div class="mb-2">
                                     <span class="badge bg-warning text-dark">BUSINESS</span>
                                 </div>
@@ -211,11 +219,11 @@
                                         Remote Work Revolution: Building Effective Digital Teams
                                     </a>
                                 </h6>
-                                <p class="card-text text-muted small">
+                                <p class="card-text text-muted small flex-grow-1">
                                     Best practices for managing remote teams and maintaining productivity 
                                     in a distributed work environment.
                                 </p>
-                                <small class="text-muted">
+                                <small class="text-muted mt-auto">
                                     <i class="bi bi-clock me-1"></i>5 min read
                                 </small>
                             </div>
@@ -227,15 +235,17 @@
             <!-- Recent Post 2 -->
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://picsum.photos/200/150?random=5" 
-                                 class="img-fluid rounded-start h-100" 
-                                 alt="Recent Post"
-                                 style="object-fit: cover;">
+                    <div class="row g-0 h-100">
+                        <!-- Fixed image container for horizontal layout -->
+                        <div class="col-4">
+                            <div class="h-100" style="min-height: 140px;">
+                                <img src="https://picsum.photos/200/150?random=5" 
+                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
+                                     alt="Recent Post">
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
+                        <div class="col-8">
+                            <div class="card-body h-100 d-flex flex-column">
                                 <div class="mb-2">
                                     <span class="badge bg-danger">FOOD</span>
                                 </div>
@@ -244,11 +254,11 @@
                                         Healthy Meal Prep: 7 Days of Delicious Recipes
                                     </a>
                                 </h6>
-                                <p class="card-text text-muted small">
+                                <p class="card-text text-muted small flex-grow-1">
                                     Save time and eat healthier with these easy meal prep ideas 
                                     that will keep you satisfied all week long.
                                 </p>
-                                <small class="text-muted">
+                                <small class="text-muted mt-auto">
                                     <i class="bi bi-clock me-1"></i>3 min read
                                 </small>
                             </div>
@@ -260,15 +270,17 @@
             <!-- Recent Post 3 -->
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://picsum.photos/200/150?random=6" 
-                                 class="img-fluid rounded-start h-100" 
-                                 alt="Recent Post"
-                                 style="object-fit: cover;">
+                    <div class="row g-0 h-100">
+                        <!-- Fixed image container for horizontal layout -->
+                        <div class="col-4">
+                            <div class="h-100" style="min-height: 140px;">
+                                <img src="https://picsum.photos/200/150?random=6" 
+                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
+                                     alt="Recent Post">
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
+                        <div class="col-8">
+                            <div class="card-body h-100 d-flex flex-column">
                                 <div class="mb-2">
                                     <span class="badge bg-primary">TECHNOLOGY</span>
                                 </div>
@@ -277,11 +289,11 @@
                                         Web Development Trends That Will Dominate 2025
                                     </a>
                                 </h6>
-                                <p class="card-text text-muted small">
+                                <p class="card-text text-muted small flex-grow-1">
                                     Stay ahead of the curve with these emerging web development 
                                     trends and technologies shaping the future.
                                 </p>
-                                <small class="text-muted">
+                                <small class="text-muted mt-auto">
                                     <i class="bi bi-clock me-1"></i>7 min read
                                 </small>
                             </div>
@@ -293,15 +305,17 @@
             <!-- Recent Post 4 -->
             <div class="col-lg-6">
                 <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img src="https://picsum.photos/200/150?random=7" 
-                                 class="img-fluid rounded-start h-100" 
-                                 alt="Recent Post"
-                                 style="object-fit: cover;">
+                    <div class="row g-0 h-100">
+                        <!-- Fixed image container for horizontal layout -->
+                        <div class="col-4">
+                            <div class="h-100" style="min-height: 140px;">
+                                <img src="https://picsum.photos/200/150?random=7" 
+                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
+                                     alt="Recent Post">
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
+                        <div class="col-8">
+                            <div class="card-body h-100 d-flex flex-column">
                                 <div class="mb-2">
                                     <span class="badge bg-success">LIFESTYLE</span>
                                 </div>
@@ -310,11 +324,11 @@
                                         Mindful Living: Simple Practices for Inner Peace
                                     </a>
                                 </h6>
-                                <p class="card-text text-muted small">
+                                <p class="card-text text-muted small flex-grow-1">
                                     Discover practical mindfulness techniques to reduce stress 
                                     and find balance in your daily routine.
                                 </p>
-                                <small class="text-muted">
+                                <small class="text-muted mt-auto">
                                     <i class="bi bi-clock me-1"></i>4 min read
                                 </small>
                             </div>
