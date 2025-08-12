@@ -15,7 +15,7 @@ from django.db.models import Q
 logger = logging.getLogger('posts')
 
 class PostViewSet(ModelViewSet):
-    queryset = Post.objects.select_related('category', 'author').all()
+    queryset = Post.objects.select_related('category', 'author').all().order_by('-updated_at')
     serializer_class = PostSerializer
     permission_classes = [IsAdminUser]
     
