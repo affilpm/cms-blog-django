@@ -155,6 +155,7 @@ class UserCommentListCreateView(ListCreateAPIView):
             Q(is_approved=True) | Q(user=user)
         ).select_related('user').order_by('-created_at')
         
+        
 class PostRecordAPIView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -176,4 +177,20 @@ class PostRecordAPIView(APIView):
         return success_response(message='View recorded', status_code=status.HTTP_201_CREATED)
         
         
+class CommentApprovalStatusAPIView(APIView):
+    permission_classes = [IsAdminUser]
+    
+    def patch(self, request, comment_id=None):
+        
+            if comment_id is not None:
+                comment = get_object_or_404(Comment, id=comment_id)
+                comment.is_approved = not comment.is_approved
+                comment.save()
+                return success_response(message='status changed', data={'is_approved':comment.is_approved})
+            
+            comment = Comment.objects.filter(is_approved=False).update(is_approved=True)
+            
+            return success_response(message='all comments accepted', data={'approved_count':comment})            
+            
+            
           
