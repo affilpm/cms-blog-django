@@ -29,8 +29,6 @@ This CMS application provides a comprehensive platform for content creators to p
 - User management (create, edit, delete, toggle status)
 - Post management (create, edit, delete, publish/unpublish)
 - Comment moderation (approve/block)
-- Analytics and view tracking
-- Media file management
 
 ## API Endpoints
 
@@ -81,8 +79,8 @@ This CMS application provides a comprehensive platform for content creators to p
 ### Prerequisites
 - Python 3.8+
 - Django 4.x
-- Database (MySQL/PostgreSQL)
-- Cloud storage account (AWS S3/Azure)
+- Database (PostgreSQL)
+- Cloud storage account (AWS S3)
 
 ### Setup Instructions
 
@@ -234,6 +232,14 @@ cms-application/
 5. Set up SSL certificates
 6. Deploy using your preferred platform (AWS, Heroku, DigitalOcean)
 
-## License
+## 📜 License  
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.  
+
+## 📞 Contact  
+
+**AFFIL P M**  
+📧 [affilpm2004@gmail.com](mailto:affilpm2004@gmail.com)  
+
+### 🌐 Social Media:  
+- **LinkedIn:** [linkedin.com/in/affilpm](https://www.linkedin.com/in/affil-p-m-b9a2b2299)  
