@@ -1,9 +1,9 @@
-{% extends 'core/core_base.html'%}
+{% extends 'core/base_with_header_footer.html'%}
 {% load static %}
 
 {% block extra_css %}
-
-<link rel="stylesheet" href="{% static 'admin_panel_static/css/admin_post_detail.css' %}"/>
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'home_static/css/post_detail.css' %}"/>
 {% endblock %}
 
 {% block content %}
@@ -137,9 +137,10 @@
 {% endblock %}
 
 {% block extra_js %}
+{{ block.super }}
 <!-- Pass the post ID to JavaScript -->
 <script>
     window.postId = {{ post.id }};
 </script>
-<script type="module" src="{% static 'admin_panel_static/js/admin_post_detail.js' %}" defer></script>
+<script type="module" src="{% static 'home_static/js/post_detail.js' %}" defer></script>
 {% endblock %}

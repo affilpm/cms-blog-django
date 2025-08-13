@@ -1,5 +1,6 @@
 {% extends 'core/base_with_header_footer.html' %}
 {% load static %}
+{% load short_content %}
 
 {% block title %}Home - MyBlog{% endblock %}
 
@@ -25,12 +26,12 @@
                     readers and writers.
                 </p>
                 <div class="d-flex flex-wrap gap-3">
-                    <a href="#" class="btn btn-warning btn-lg">
+                    <a href="{% url 'post_list' %}" class="btn btn-warning btn-lg">
                         <i class="bi bi-book me-2"></i>Explore Posts
                     </a>
-                    <a href="#" class="btn btn-outline-light btn-lg">
+                    {% comment %} <a href="#" class="btn btn-outline-light btn-lg">
                         <i class="bi bi-person-plus me-2"></i>Join Community
-                    </a>
+                    </a> {% endcomment %}
                 </div>
             </div>
             <div class="col-lg-6 mt-5 mt-lg-0 text-center">
@@ -49,15 +50,15 @@
     <div class="container">
         <div class="row text-center">
             <div class="col-md-3 col-6 mb-3 mb-md-0">
-                <h3 class="fw-bold mb-1">1,250+</h3>
+                <h3 class="fw-bold mb-1">{{ total_posts }}+</h3>
                 <small class="text-white-50">Articles Published</small>
             </div>
             <div class="col-md-3 col-6 mb-3 mb-md-0">
-                <h3 class="fw-bold mb-1">15K+</h3>
+                <h3 class="fw-bold mb-1">{{ total_readers }}+</h3>
                 <small class="text-white-50">Active Readers</small>
             </div>
             <div class="col-md-3 col-6">
-                <h3 class="fw-bold mb-1">50+</h3>
+                <h3 class="fw-bold mb-1">{{ total_writers }}+</h3>
                 <small class="text-white-50">Expert Writers</small>
             </div>
             <div class="col-md-3 col-6">
@@ -79,107 +80,77 @@
         </div>
         
         <div class="row g-4">
-            <!-- Featured Post 1 -->
+
+            {% for post in featured_posts%}
+            <!-- Featured Post -->
             <div class="col-lg-4 col-md-6">
                 <div class="card h-100 shadow-sm card-hover border-0">
-                    <div class="position-relative">
-                        <!-- Image container with fixed aspect ratio -->
+                    <!-- Image Container with proper containment -->
+                    <div class="card-img-container position-relative overflow-hidden">
                         <div class="ratio ratio-16x9">
-                            <img src="https://picsum.photos/400/250?random=1" 
-                                 class="card-img-top rounded-top object-fit-cover" 
-                                 alt="Featured Post">
+                            {% if post.cover_image %}
+                            <img src="{{ post.cover_image.url }}" 
+                                 class="card-img-top object-fit-cover w-100 h-100" 
+                                 alt="Featured Post"
+                                 style="border-radius: 0.375rem 0.375rem 0 0;">
+                            {% else %}
+                            <div class="cover-placeholder d-flex align-items-center justify-content-center random-bg" 
+                                 style="width:100%; height:100%; border-radius: 0.375rem 0.375rem 0 0;" data-post-id="{{ post.id }}">
+                                <i class="bi bi-image text-white" style="font-size: 3rem; opacity: 0.7;"></i>
+                            </div>
+                            {% endif %} 
                         </div>
-                        <span class="position-absolute top-0 start-0 badge bg-primary m-2">TECHNOLOGY</span>
+                        <!-- Category badge positioned over image -->
+                        <span class="position-absolute top-0 start-0 badge bg-primary m-3 shadow-sm">
+                            {{ post.category.name }}
+                        </span>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fw-bold">
-                            <a href="#" class="text-decoration-none text-dark stretched-link">
-                                The Future of AI in Business: Trends to Watch in 2025
+                    
+                    <!-- Card Content Container -->
+                    <div class="card-body d-flex flex-column p-4">
+                        <!-- Meta information -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <small class="text-muted d-flex align-items-center">
+                                <i class="bi bi-person-circle me-1"></i>{{ post.author.username }}
+                            </small>
+                            <small class="text-muted d-flex align-items-center">
+                                <i class="bi bi-calendar me-1"></i>{{ post.created_at|date:"M d, Y" }}
+                            </small>
+                        </div>
+
+                        <!-- Title -->
+                        <h5 class="card-title fw-bold mb-3">
+                            <a href="{% url 'post_detail' post.id %}" 
+                               class="text-decoration-none text-dark stretched-link">
+                                {{ post.title }}
                             </a>
                         </h5>
-                        <p class="card-text text-muted flex-grow-1">
-                            Explore how artificial intelligence is reshaping industries and 
-                            discover the key trends that will define business success.
+                        
+                        <!-- Content excerpt -->
+                        <p class="card-text text-muted flex-grow-1 mb-4">
+                            {{ post|short_content|safe }}
                         </p>
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <small class="text-muted">
-                                <i class="bi bi-person-circle me-1"></i>John Doe
-                            </small>
-                            <small class="text-muted">
-                                <i class="bi bi-calendar me-1"></i>Jan 25, 2025
-                            </small>
+                        
+                        <!-- Stats section -->
+                        <div class="d-flex align-items-center justify-content-start gap-3 mt-auto">
+                            <span class="badge bg-light text-dark d-flex align-items-center">
+                                <i class="bi bi-eye me-1"></i>
+                                {{ post.view_count|default:0 }}
+                            </span>
+                            <span class="badge bg-light text-dark d-flex align-items-center">
+                                <i class="bi bi-chat me-1"></i>
+                                {{ post.total_comments }}
+                            </span>
+                            <span class="badge bg-light text-dark d-flex align-items-center">
+                                <i class="bi bi-heart me-1"></i>
+                                {{ post.total_likes }}
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Featured Post 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 shadow-sm card-hover border-0">
-                    <div class="position-relative">
-                        <!-- Image container with fixed aspect ratio -->
-                        <div class="ratio ratio-16x9">
-                            <img src="https://picsum.photos/400/250?random=2" 
-                                 class="card-img-top rounded-top object-fit-cover" 
-                                 alt="Featured Post">
-                        </div>
-                        <span class="position-absolute top-0 start-0 badge bg-success m-2">LIFESTYLE</span>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fw-bold">
-                            <a href="#" class="text-decoration-none text-dark stretched-link">
-                                Sustainable Living: Simple Changes for a Better Tomorrow
-                            </a>
-                        </h5>
-                        <p class="card-text text-muted flex-grow-1">
-                            Learn practical tips and strategies to reduce your environmental 
-                            footprint while maintaining a comfortable lifestyle.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <small class="text-muted">
-                                <i class="bi bi-person-circle me-1"></i>Jane Smith
-                            </small>
-                            <small class="text-muted">
-                                <i class="bi bi-calendar me-1"></i>Jan 23, 2025
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Featured Post 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 shadow-sm card-hover border-0">
-                    <div class="position-relative">
-                        <!-- Image container with fixed aspect ratio -->
-                        <div class="ratio ratio-16x9">
-                            <img src="https://picsum.photos/400/250?random=3" 
-                                 class="card-img-top rounded-top object-fit-cover" 
-                                 alt="Featured Post">
-                        </div>
-                        <span class="position-absolute top-0 start-0 badge bg-info m-2">TRAVEL</span>
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title fw-bold">
-                            <a href="#" class="text-decoration-none text-dark stretched-link">
-                                Hidden Gems: 10 Underrated Destinations to Visit in 2025
-                            </a>
-                        </h5>
-                        <p class="card-text text-muted flex-grow-1">
-                            Discover breathtaking locations off the beaten path that offer 
-                            unique experiences away from crowded tourist spots.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between mt-auto">
-                            <small class="text-muted">
-                                <i class="bi bi-person-circle me-1"></i>Mike Johnson
-                            </small>
-                            <small class="text-muted">
-                                <i class="bi bi-calendar me-1"></i>Jan 22, 2025
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -190,216 +161,111 @@
         <div class="row mb-4">
             <div class="col-12 d-flex justify-content-between align-items-center">
                 <h2 class="fw-bold mb-0">Recent Posts</h2>
-                <a href="#" class="btn btn-outline-primary">
+                <a href="{% url 'post_list' %}" class="btn btn-outline-primary">
                     View All Posts <i class="bi bi-arrow-right ms-1"></i>
                 </a>
             </div>
         </div>
         
         <div class="row g-4">
-            <!-- Recent Post 1 -->
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0 h-100">
-                        <!-- Fixed image container for horizontal layout -->
-                        <div class="col-4">
-                            <div class="h-100" style="min-height: 140px;">
-                                <img src="https://picsum.photos/200/150?random=4" 
-                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
-                                     alt="Recent Post">
-                            </div>
-                        </div>
-                        <div class="col-8">
-                            <div class="card-body h-100 d-flex flex-column">
-                                <div class="mb-2">
-                                    <span class="badge bg-warning text-dark">BUSINESS</span>
-                                </div>
-                                <h6 class="card-title fw-bold">
-                                    <a href="#" class="text-decoration-none text-dark stretched-link">
-                                        Remote Work Revolution: Building Effective Digital Teams
-                                    </a>
-                                </h6>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Best practices for managing remote teams and maintaining productivity 
-                                    in a distributed work environment.
-                                </p>
-                                <small class="text-muted mt-auto">
-                                    <i class="bi bi-clock me-1"></i>5 min read
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Recent Post 2 -->
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0 h-100">
-                        <!-- Fixed image container for horizontal layout -->
-                        <div class="col-4">
-                            <div class="h-100" style="min-height: 140px;">
-                                <img src="https://picsum.photos/200/150?random=5" 
-                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
-                                     alt="Recent Post">
-                            </div>
-                        </div>
-                        <div class="col-8">
-                            <div class="card-body h-100 d-flex flex-column">
-                                <div class="mb-2">
-                                    <span class="badge bg-danger">FOOD</span>
-                                </div>
-                                <h6 class="card-title fw-bold">
-                                    <a href="#" class="text-decoration-none text-dark stretched-link">
-                                        Healthy Meal Prep: 7 Days of Delicious Recipes
-                                    </a>
-                                </h6>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Save time and eat healthier with these easy meal prep ideas 
-                                    that will keep you satisfied all week long.
-                                </p>
-                                <small class="text-muted mt-auto">
-                                    <i class="bi bi-clock me-1"></i>3 min read
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Recent Post 3 -->
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0 h-100">
-                        <!-- Fixed image container for horizontal layout -->
-                        <div class="col-4">
-                            <div class="h-100" style="min-height: 140px;">
-                                <img src="https://picsum.photos/200/150?random=6" 
-                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
-                                     alt="Recent Post">
-                            </div>
-                        </div>
-                        <div class="col-8">
-                            <div class="card-body h-100 d-flex flex-column">
-                                <div class="mb-2">
-                                    <span class="badge bg-primary">TECHNOLOGY</span>
-                                </div>
-                                <h6 class="card-title fw-bold">
-                                    <a href="#" class="text-decoration-none text-dark stretched-link">
-                                        Web Development Trends That Will Dominate 2025
-                                    </a>
-                                </h6>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Stay ahead of the curve with these emerging web development 
-                                    trends and technologies shaping the future.
-                                </p>
-                                <small class="text-muted mt-auto">
-                                    <i class="bi bi-clock me-1"></i>7 min read
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Recent Post 4 -->
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm card-hover">
-                    <div class="row g-0 h-100">
-                        <!-- Fixed image container for horizontal layout -->
-                        <div class="col-4">
-                            <div class="h-100" style="min-height: 140px;">
-                                <img src="https://picsum.photos/200/150?random=7" 
-                                     class="img-fluid rounded-start h-100 w-100 object-fit-cover" 
-                                     alt="Recent Post">
-                            </div>
-                        </div>
-                        <div class="col-8">
-                            <div class="card-body h-100 d-flex flex-column">
-                                <div class="mb-2">
-                                    <span class="badge bg-success">LIFESTYLE</span>
-                                </div>
-                                <h6 class="card-title fw-bold">
-                                    <a href="#" class="text-decoration-none text-dark stretched-link">
-                                        Mindful Living: Simple Practices for Inner Peace
-                                    </a>
-                                </h6>
-                                <p class="card-text text-muted small flex-grow-1">
-                                    Discover practical mindfulness techniques to reduce stress 
-                                    and find balance in your daily routine.
-                                </p>
-                                <small class="text-muted mt-auto">
-                                    <i class="bi bi-clock me-1"></i>4 min read
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Categories Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col-12 text-center">
-                <h2 class="fw-bold mb-3">Explore Categories</h2>
-                <p class="text-muted">Find content that interests you most</p>
+            {% for post in recent_posts %}
+            <!-- Recent Post with horizontal layout -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm card-hover h-100">
+                    <div class="row g-0 h-100">
+                        <!-- Image Container for horizontal layout -->
+                        <div class="col-4">
+                            <div class="recent-post-img-container h-100 position-relative overflow-hidden" 
+                                 style="min-height: 180px;">
+                                {% if post.cover_image %}
+                                <img src="{{ post.cover_image.url }}" 
+                                     class="img-fluid w-100 h-100 object-fit-cover" 
+                                     alt="Recent Post"
+                                     style="border-radius: 0.375rem 0 0 0.375rem;">
+                                {% else %}
+                                <div class="cover-placeholder d-flex align-items-center justify-content-center h-100 random-bg" 
+                                     style="width:100%; border-radius: 0.375rem 0 0 0.375rem;" data-post-id="{{ post.id }}">
+                                    <i class="bi bi-image text-white" style="font-size: 2rem; opacity: 0.7;"></i>
+                                </div>
+                                {% endif %}                                      
+                            </div>
+                        </div>
+                        
+                        <!-- Content Container -->
+                        <div class="col-8">
+                            <div class="card-body h-100 d-flex flex-column p-4">
+                                <!-- Category badge -->
+                                <div class="mb-2">
+                                    <span class="badge bg-warning text-dark">{{ post.category.name }}</span>
+                                </div>
+
+                                <!-- Title -->
+                                <h6 class="card-title fw-bold mb-3">
+                                    <a href="{% url 'post_detail' post.id %}" 
+                                       class="text-decoration-none text-dark stretched-link">
+                                        {{ post.title }}
+                                    </a>
+                                </h6>
+
+                                <!-- Content excerpt -->
+                                <p class="card-text text-muted small flex-grow-1 mb-3">
+                                    {{ post|short_content:40|safe }}
+                                </p>
+
+                                <!-- Meta and stats -->
+                                <div class="mt-auto">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <small class="text-muted d-flex align-items-center">
+                                            <i class="bi bi-person-circle me-1"></i>{{ post.author.username }}
+                                        </small>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge bg-light text-dark d-flex align-items-center">
+                                            <i class="bi bi-eye me-1"></i>
+                                            {{ post.view_count|default:0 }}
+                                        </span>
+                                        <span class="badge bg-light text-dark d-flex align-items-center">
+                                            <i class="bi bi-chat me-1"></i>
+                                            {{ post.total_comments }}
+                                        </span>
+                                        <span class="badge bg-light text-dark d-flex align-items-center">
+                                            <i class="bi bi-heart me-1"></i>
+                                            {{ post.total_likes }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            {% endfor %}
+
         </div>
         
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 text-center bg-primary text-white card-hover">
-                    <div class="card-body py-4">
-                        <i class="bi bi-laptop display-4 mb-3"></i>
-                        <h5 class="card-title fw-bold">Technology</h5>
-                        <p class="card-text">Latest tech trends and innovations</p>
-                        <span class="badge bg-white text-primary">142 Posts</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 text-center bg-success text-white card-hover">
-                    <div class="card-body py-4">
-                        <i class="bi bi-heart display-4 mb-3"></i>
-                        <h5 class="card-title fw-bold">Lifestyle</h5>
-                        <p class="card-text">Health, wellness, and life tips</p>
-                        <span class="badge bg-white text-success">98 Posts</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 text-center bg-info text-white card-hover">
-                    <div class="card-body py-4">
-                        <i class="bi bi-airplane display-4 mb-3"></i>
-                        <h5 class="card-title fw-bold">Travel</h5>
-                        <p class="card-text">Adventure and destination guides</p>
-                        <span class="badge bg-white text-info">76 Posts</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-3 col-md-6">
-                <div class="card border-0 text-center bg-danger text-white card-hover">
-                    <div class="card-body py-4">
-                        <i class="bi bi-cup-hot display-4 mb-3"></i>
-                        <h5 class="card-title fw-bold">Food</h5>
-                        <p class="card-text">Recipes and culinary adventures</p>
-                        <span class="badge bg-white text-danger">54 Posts</span>
-                    </div>
+        <!-- Call to Action for More Posts -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <div class="bg-white rounded-3 p-4 shadow-sm">
+                    <h5 class="mb-3">Want to read more?</h5>
+                    <p class="text-muted mb-3">
+                        Explore our complete collection of articles covering technology, lifestyle, 
+                        travel, food, and much more.
+                    </p>
+                    <a href="{% url 'post_list' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-grid-3x3-gap me-2"></i>Browse All Posts
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
+
+
 <!-- Newsletter CTA Section -->
-<section class="bg-primary text-white py-5">
+{% comment %} <section class="bg-primary text-white py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
@@ -428,5 +294,10 @@
             </div>
         </div>
     </div>
-</section>
+</section> {% endcomment %}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script type="module" src="{% static 'home_static/js/home.js' %}" defer></script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from ..models import Post, Category, Comment
+from ..models import Post, Category, Comment, PostView
 from .serializers import PostSerializer, CategorySerializer, UserCommentSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.renderers import JSONRenderer
@@ -11,6 +11,7 @@ from core.utils.responses import success_response, error_response
 import logging
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from ..utils.ip import get_client_ip
 
 logger = logging.getLogger('posts')
 
@@ -76,11 +77,15 @@ class PostViewSet(ModelViewSet):
   
   
 class CategoryView(APIView):
+    """ 
+    List all category
+    """
     permission_classes = [IsAdminUser]
     def get(self, request):
         category_name = Category.objects.values('id','name')
         serializer = CategorySerializer(category_name, many=True)
         return success_response(data=serializer.data)
+    
     
 class PostLIkeStatusAPIView(APIView):
     """
@@ -88,7 +93,7 @@ class PostLIkeStatusAPIView(APIView):
     GET: Retrieve total likes and if current user liked the post.
     POST: Toggle like/unlike for the current user.
     """
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     
     def get_post(self, pk):
         return get_object_or_404(Post.objects.prefetch_related('reactions'), pk=pk)
@@ -129,8 +134,6 @@ class PostLIkeStatusAPIView(APIView):
         )        
                     
         
-        
-        
 class UserCommentListCreateView(ListCreateAPIView):
     """
     List approved comments and current user's comments for a post.
@@ -151,3 +154,26 @@ class UserCommentListCreateView(ListCreateAPIView):
         ).filter(
             Q(is_approved=True) | Q(user=user)
         ).select_related('user').order_by('-created_at')
+        
+class PostRecordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self,request,post_id):
+        post = get_object_or_404(Post, id=post_id)
+        
+        user = request.user
+        
+        if user.is_superuser or user.is_staff:
+            return success_response(message='admin view not counted')
+        
+        ip = get_client_ip(request)      
+        
+        PostView.objects.create(user=user, post=post, ip_address=ip)
+        
+        post.view_count = post.view_count + 1
+        post.save(update_fields=['view_count'])
+        
+        return success_response(message='View recorded', status_code=status.HTTP_201_CREATED)
+        
+        
+          

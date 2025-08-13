@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from core.models.base import TimeStampedModel 
 
+
 User = get_user_model()
 
 class Category(models.Model):
@@ -39,16 +40,23 @@ class Post(TimeStampedModel):
                 return 0
             return 0
         
+    @property   
     def get_attachment_type(self):
         if self.attachment:
             import mimetypes
             mime_type, _ = mimetypes.guess_type(self.attachment.name)
             return mime_type
-        return None        
+        return None   
+         
+    @property   
+    def total_comments(self):
+        return self.comments.filter(is_approved=True).count()
     
+    @property   
     def total_likes(self):
         return self.reactions.count()
     
+    @property   
     def is_published(self):
         return not self.is_draft
     

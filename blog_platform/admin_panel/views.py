@@ -33,6 +33,7 @@ class PostListView(SuperUserRequiredMixin, ActiveSectionMixin, TemplateView):
     template_name = 'admin_panel/admin_post_list.html'
     active_section = 'admin_post_list'    
         
+@method_decorator(never_cache, name='dispatch')
 class AdminPostDetailView(SuperUserRequiredMixin,TemplateView):
     template_name = 'admin_panel/admin_post_detail.html'    
     
