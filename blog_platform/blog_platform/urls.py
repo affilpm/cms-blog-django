@@ -26,14 +26,12 @@ urlpatterns = [
     path('', include('home.urls')),
     path('users/', include('users.urls')),
     path('posts/', include('posts.urls')),
-    path('comments/', include('comments.urls')),
     path('admin-panel/', include('admin_panel.urls')),
        
     # API URLs (DRF)
     path('api/home/', include('home.api.urls')),
     path('api/users/', include('users.api.urls')),
     path('api/posts/', include('posts.api.urls')),
-    path('api/comments/', include('comments.api.urls')),
     path('api/admin-panel/', include('admin_panel.api.urls')),
 ]
 

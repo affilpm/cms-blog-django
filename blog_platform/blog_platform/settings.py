@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'core',
     'users',
     'posts',
-    'comments',
     'admin_panel',
     'home',
     'rest_framework',
