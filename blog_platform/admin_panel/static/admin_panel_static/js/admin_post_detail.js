@@ -1,4 +1,5 @@
 import { post, get } from "/static/core_static/js/api.js";
+import { endpoints } from "/static/core_static/js/apiEndpoints.js";
 
 // Get postId from the template
 const postId = window.postId ; 
@@ -6,7 +7,7 @@ const postId = window.postId ;
 // Like functionality
 async function fetchLikeStatus() {
     try {
-        const {response, data} = await get(`/api/posts/${postId}/like/`);
+        const {response, data} = await get(endpoints.fetch_like_status(postId));
         
         if (response.ok) {
             const likeData = data.data || data;
@@ -75,7 +76,7 @@ async function toggleLike() {
     }
     
     try {
-        const {response, data} = await post(`/api/posts/${postId}/like/`);
+        const {response, data} = await post(endpoints.toggle_like(postId));
 
         if (response.ok) {
             // Check different possible response structures
@@ -89,7 +90,7 @@ async function toggleLike() {
             // Add a small delay then fetch fresh data to ensure accuracy
             setTimeout(async () => {
                 try {
-                    const {response: freshResponse, data: freshData} = await get(`/api/posts/${postId}/like/`);
+                    const {response: freshResponse, data: freshData} = await get(endpoints.toggle_like(postId));
                     if (freshResponse.ok) {
                         const freshLikeData = freshData.data || freshData;
                         // Only update if the counts are different (to avoid unnecessary animations)
@@ -127,7 +128,7 @@ async function fetchComments() {
         if (commentsListElement) commentsListElement.innerHTML = '';
         if (noCommentsElement) noCommentsElement.style.display = 'none';
 
-        const {response, data} = await get(`/api/posts/comments/?post=${postId}`);
+        const {response, data} = await get(endpoints.fetch_comments(postId));
 
         if (response.ok) {
             // Handle both possible response structures
@@ -195,7 +196,7 @@ function renderComments(comments) {
 }
 
 async function view_counter() {
-    await post(`/api/posts/${postId}/view/`)
+    await post(endpoints.view_counter(postId))
 }
 
 function getInitials(name) {
