@@ -64,9 +64,9 @@ This CMS application provides a comprehensive platform for content creators to p
 
 ### Backend
 - **Framework**: Django
-- **Database**: MySQL/PostgreSQL
+- **Database**: PostgreSQL
 - **Authentication**: JWT tokens
-- **Storage**: Cloud storage (AWS S3/Azure Blob)
+- **Storage**: Cloud storage (AWS S3)
 - **API**: Django REST Framework
 
 ### Frontend
