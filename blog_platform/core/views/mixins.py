@@ -33,7 +33,7 @@ class RedirectAuthenticatedUserMixin:
             
             if user:
                 if user.is_superuser or user.is_staff:
-                    return redirect('admin_dashboard')
+                    return redirect('admin_users_list')
                 else:
                     return redirect('home')
         return super().dispatch(request, *args, **kwargs)
