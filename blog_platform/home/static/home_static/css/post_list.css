@@ -1,0 +1,62 @@
+/* Blog card image styling - fixed size */
+.blog-image {
+    width: 100%;
+    height: 250px; /* Fixed height for all images */
+    object-fit: cover; /* Ensures proper aspect ratio for actual images */
+    object-position: center; /* Centers the image */
+}
+
+/* For placeholder divs (no image), ensure they also have the same height */
+.blog-image.d-flex {
+    height: 250px;
+}
+
+/* Blog card hover effects */
+.blog-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Image container styling */
+.blog-card .position-relative {
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+}
+
+/* Category badge positioning */
+.blog-card .badge {
+    border-radius: 20px;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+}
+
+/* Card body spacing */
+.blog-card .card-body {
+    padding: 1.5rem;
+}
+
+/* Title styling */
+.blog-card .card-title a:hover {
+    color: #0056b3 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .blog-image,
+    .blog-image.d-flex {
+        height: 200px; /* Slightly smaller on mobile */
+    }
+}
+
+@media (max-width: 576px) {
+    .blog-image,
+    .blog-image.d-flex {
+        height: 180px; /* Even smaller on very small screens */
+    }
+}

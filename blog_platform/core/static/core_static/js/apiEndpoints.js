@@ -16,7 +16,12 @@ export const endpoints = {
     list_post: '/api/posts/post/',
     edit_post: (id) => `/api/posts/post/${id}/`,
     delete_post: (id) => `/api/posts/post/${id}/`,
-    toggle_status: (id) => `/api/posts/post/${id}/toggle-status/`
+    toggle_status: (id) => `/api/posts/post/${id}/toggle-status/`,
+    //post-detail
+    fetch_like_status: (id) => `/api/posts/${id}/like/`,
+    toggle_like: (id) => `/api/posts/${id}/like/`,
+    fetch_comments: (id) => `/api/posts/comments/?post=${id}`,
+    view_counter: (id) => `/api/posts/${id}/view/`
 
 
 

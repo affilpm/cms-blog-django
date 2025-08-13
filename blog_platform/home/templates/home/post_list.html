@@ -1,0 +1,252 @@
+{% extends "core/base_with_header_footer.html" %}
+{% load static %}
+{% load short_content %}
+
+{% block extra_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'home_static/css/post_list.css' %}">
+{% endblock %}
+
+{% block main_content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-dark mb-3">Our Blog</h1>
+            <p class="lead text-muted">Discover stories, insights, and inspiration from our community of writers</p>
+        </div>
+    </div>
+
+    {% comment %} <!-- Search and Filter Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="GET" id="searchForm">
+                        <div class="row g-3">
+                            <!-- Search Input -->
+                            <div class="col-md-6">
+                                <div class="position-relative">
+                                    <input type="text" name="search" id="searchInput" 
+                                           class="form-control form-control-lg ps-5 border-0 bg-light" 
+                                           placeholder="Search posts..." 
+                                           value="{{ request.GET.search }}">
+                                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Category Filter -->
+                            <div class="col-md-4">
+                                <select name="category" id="categoryFilter" class="form-select form-select-lg border-0 bg-light">
+                                    <option value="">All Categories</option>
+                                    <option value="technology" {% if request.GET.category == 'technology' %}selected{% endif %}>Technology</option>
+                                    <option value="lifestyle" {% if request.GET.category == 'lifestyle' %}selected{% endif %}>Lifestyle</option>
+                                    <option value="travel" {% if request.GET.category == 'travel' %}selected{% endif %}>Travel</option>
+                                    <option value="food" {% if request.GET.category == 'food' %}selected{% endif %}>Food</option>
+                                    <option value="business" {% if request.GET.category == 'business' %}selected{% endif %}>Business</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Search Button -->
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Info -->
+    {% if request.GET.search or request.GET.category %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <p class="text-muted mb-0">
+                        {% if request.GET.search %}
+                            Showing results for "<strong>{{ request.GET.search }}</strong>"
+                        {% endif %}
+                        {% if request.GET.category %}
+                            {% if request.GET.search %}in{% endif %} 
+                            category: <strong class="text-capitalize">{{ request.GET.category }}</strong>
+                        {% endif %}
+                    </p>
+                </div>
+                <a href="{% url 'blog_list' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-x-circle me-1"></i>Clear Filters
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %} {% endcomment %}
+
+    <!-- Blog Posts Grid -->
+    <div class="row equal-height">
+        {% if posts %}
+            {% for post in posts %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <article class="card h-100 border-0 shadow-sm blog-card">
+                    <!-- Post Image -->
+                    <div class="position-relative overflow-hidden">
+                        {% if post.cover_image %}
+                            <img src="{{ post.cover_image.url }}" 
+                                class="card-img-top blog-image" 
+                                alt="{{ post.title }}"
+                                loading="lazy">
+                        {% else %}
+                            <div class="card-img-top blog-image d-flex align-items-center justify-content-center random-bg" 
+                                data-post-id="{{ post.id }}">
+                                <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Category Badge -->
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-3">
+                            {{ post.category|title }}
+                        </span>
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <!-- Post Meta -->
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="d-flex align-items-center me-3">
+                                {% if post.author.profile.image %}
+                                    <img src="{{ post.author.profile.image.url }}" 
+                                         class="rounded-circle me-2" 
+                                         width="24" height="24" 
+                                         alt="{{ post.author.username }}">
+                                {% else %}
+                                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-2"
+                                         style="width: 24px; height: 24px;">
+                                        <i class="bi bi-person text-white" style="font-size: 0.8rem;"></i>
+                                    </div>
+                                {% endif %}
+                                <small class="text-muted">{{ post.author.username }}</small>
+                            </div>
+                            <small class="text-muted">
+                                <i class="bi bi-calendar3 me-1"></i>
+                                {{ post.created_at|date:"M d, Y" }}
+                            </small>
+                        </div>
+
+                        <!-- Post Title -->
+                        <h5 class="card-title mb-3">
+                            <a href="{% url 'post_detail' post.id %}" 
+                               class="text-decoration-none text-dark stretched-link">
+                                {{ post.title }}
+                            </a>
+                        </h5>
+
+                        <!-- Post Excerpt -->
+                        <p class="card-text text-muted mb-3 flex-grow-1">
+                            {{ post|short_content:80|safe }}
+                        </p>
+
+                        <!-- Post Footer -->
+                        <div class="d-flex align-items-center justify-content-between mt-auto">
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-light text-dark me-2">
+                                    <i class="bi bi-eye me-1"></i>
+                                    {{ post.view_count|default:0 }}
+                                </span>
+                                <span class="badge bg-light text-dark">
+                                    <i class="bi bi-chat me-1"></i>
+                                    {{ post.total_comments }}
+                                </span>
+                                <span class="badge bg-light text-dark d-flex align-items-center">
+                                    <i class="bi bi-heart me-1"></i>
+                                    {{ post.total_likes }}
+                                </span>
+                            </div>
+                            <small class="text-muted">
+                                {{ post.read_time|default:5 }} min read
+                            </small>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% endfor %}
+        {% else %}
+            <!-- No Posts Found -->
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-journal-x display-1 text-muted"></i>
+                    </div>
+                    <h3 class="text-muted mb-3">No posts found</h3>
+                    <p class="text-muted mb-4">
+                        {% if request.GET.search or request.GET.category %}
+                            Try adjusting your search terms or clearing the filters.
+                        {% else %}
+                            There are no blog posts available at the moment.
+                        {% endif %}
+                    </p>
+                    {% if request.GET.search or request.GET.category %}
+                        <a href="{% url 'blog_list' %}" class="btn btn-primary">
+                            <i class="bi bi-arrow-left me-2"></i>View All Posts
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if posts.has_other_pages %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <nav aria-label="Blog pagination">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                <i class="bi bi-chevron-double-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in posts.paginator.page_range %}
+                        {% if posts.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if posts.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script type="module" src="{% static 'home_static/js/post_list.js' %}" defer></script>
+{% endblock %}
