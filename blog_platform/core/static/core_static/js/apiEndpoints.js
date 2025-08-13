@@ -21,7 +21,11 @@ export const endpoints = {
     fetch_like_status: (id) => `/api/posts/${id}/like/`,
     toggle_like: (id) => `/api/posts/${id}/like/`,
     fetch_comments: (id) => `/api/posts/comments/?post=${id}`,
-    view_counter: (id) => `/api/posts/${id}/view/`
+    view_counter: (id) => `/api/posts/${id}/view/`,
+    //comment-handler
+    toggle_comment: (id) => `/api/posts/${id}/toggle-comment/`,
+    approve_all_comments: '/api/posts/approve-comments/',
+
 
 
 

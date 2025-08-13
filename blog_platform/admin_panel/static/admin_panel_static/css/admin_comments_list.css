@@ -6,13 +6,13 @@
 
 .table-glass th {
     background: var(--glass-bg);
-    color: white;
+    color: rgb(19, 3, 3);
     border: none;
     font-weight: 600;
 }
 
 .table-glass td {
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(6, 0, 0, 0.9);
     border-color: rgba(255, 255, 255, 0.1);
 }
 

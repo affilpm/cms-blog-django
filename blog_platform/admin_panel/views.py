@@ -3,7 +3,9 @@ from core.views.mixins import SuperUserRequiredMixin, ActiveSectionMixin
 from django.views.generic import TemplateView
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
-from posts.models import Post, PostReaction
+from posts.models import Post, PostReaction, Comment
+from django.views import View
+
 
 @method_decorator(never_cache, name='dispatch')
 class DashboardView(SuperUserRequiredMixin, ActiveSectionMixin, TemplateView):
@@ -45,5 +47,13 @@ class AdminPostDetailView(SuperUserRequiredMixin,TemplateView):
         is_liked = post_data.reactions.filter(user_id = user_id).exists()
         context['post'] = post_data
         context['is_liked'] = is_liked
-        return context        
+        return context 
+           
+class AdminCommentView(SuperUserRequiredMixin, ActiveSectionMixin, View):    
+        template_name = 'admin_panel/admin_comments_list.html'
         
+        def get(self, request):
+            comments = Comment.objects.all()
+            context = {'comments': comments}
+            return render(request, self.template_name, context=context)
+            

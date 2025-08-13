@@ -18,10 +18,16 @@
             <p>Content Management</p>
         </div>
         <ul class="nav flex-column px-3">
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
                 <a class="nav-link {% if active_section == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
+                </a>
+            </li> {% endcomment %}
+            <li class="nav-item">
+                <a class="nav-link {% if active_section == 'admin_users_list' %}active{% endif %}" href="{% url 'admin_users_list' %}">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -31,29 +37,23 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if active_section == 'admin_users_list' %}active{% endif %}" href="{% url 'admin_users_list' %}">
-                    <i class="fas fa-users"></i>
-                    <span>Users</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if active_section == 'comments' %}active{% endif %}" href="">
+                <a class="nav-link {% if active_section == 'comments' %}active{% endif %}" href="{% url 'admin_comments' %}">
                     <i class="fas fa-comments"></i>
                     <span>Comments</span>
                 </a>
             </li>
-            <li class="nav-item">
+            {% comment %} <li class="nav-item">
                 <a class="nav-link {% if active_section == 'media' %}active{% endif %}" href="">
                     <i class="fas fa-images"></i>
                     <span>Media</span>
                 </a>
-            </li>
-            <li class="nav-item">
+            </li> {% endcomment %}
+            {% comment %} <li class="nav-item">
                 <a class="nav-link {% if active_section == 'settings' %}active{% endif %}" href="">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </a>
-            </li>
+            </li> {% endcomment %}
         </ul>
     </nav>
 
