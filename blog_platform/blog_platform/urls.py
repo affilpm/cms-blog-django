@@ -35,6 +35,3 @@ urlpatterns = [
     path('api/admin-panel/', include('admin_panel.api.urls')),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
