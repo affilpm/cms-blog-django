@@ -11,14 +11,17 @@ from rest_framework.decorators import action
 from ..models import CustomUser
 
 class RegistrationAPIView(APIView):
+
     def post(self, request):
         serializer = UserAuthSerializer(data = request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return success_response(
                 message='User registered succesfully.', 
                 status_code=status.HTTP_201_CREATED
                 )
+            
         return error_response(
             message='Invalid form submission', 
             error=serializer.errors, 
@@ -26,6 +29,7 @@ class RegistrationAPIView(APIView):
             )    
     
 class LoginAPIView(APIView):
+    """Handles User/Admin login with JWT token issuance"""
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
@@ -71,6 +75,7 @@ class LogoutAPIView(APIView):
         return response
     
 class AdminUserManagementViewSet(ModelViewSet):
+    """"Admin user management: Crud"""
     queryset = CustomUser.objects.filter(is_superuser = False).order_by('id')
     permission_classes = [IsAdminUser]
     

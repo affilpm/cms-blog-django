@@ -157,6 +157,7 @@ class UserCommentListCreateView(ListCreateAPIView):
         
         
 class PostRecordAPIView(APIView):
+    """Handles post view count"""
     permission_classes = [IsAuthenticated]
     
     def post(self,request,post_id):
@@ -178,6 +179,7 @@ class PostRecordAPIView(APIView):
         
         
 class CommentApprovalStatusAPIView(APIView):
+    """Handles user comment approval status"""
     permission_classes = [IsAdminUser]
     
     def patch(self, request, comment_id=None):

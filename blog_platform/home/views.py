@@ -11,7 +11,7 @@ class HomeView(NormalUserOnlyMixin, View):
     template_name = 'home/home.html'
     
     def get(self, request, *args, **kwargs):
-        # top posts by view count
+ 
         featured_posts = Post.objects.select_related('author', 'category').prefetch_related('comments').filter(is_draft=False).order_by('-view_count', '-created_at')[:3]
 
         recent_posts = Post.objects.prefetch_related('author', 'category').prefetch_related('comments').filter(is_draft=False).order_by('-created_at')[:2]
@@ -36,7 +36,7 @@ class PostListView(NormalUserOnlyMixin, View):
     template_name = 'home/post_list.html'
     
     def get(self, request, *args, **kwargs):
-        # top posts by view count
+ 
         posts = Post.objects.select_related('author', 'category').prefetch_related('comments').filter(is_draft=False).order_by('-view_count', '-created_at')
         
         return render(request, self.template_name, context={'posts':posts})
