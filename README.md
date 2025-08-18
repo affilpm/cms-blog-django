@@ -41,6 +41,7 @@ This blog platform provides a comprehensive system for content creators to publi
 - **Authentication**: JWT tokens with refresh mechanism
 - **API**: Django REST Framework
 - **Middleware**: Custom JWT refresh and cache clearing
+- **Media & Static Storage**: AWS S3 via `django-storages`
 
 ### Frontend
 - **Templates**: Django Templates with modular structure

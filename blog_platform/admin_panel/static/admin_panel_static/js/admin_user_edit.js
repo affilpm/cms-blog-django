@@ -224,7 +224,7 @@ async function handleFormSubmit(e) {
         
         if (response.ok) {
             showSuccess('Account updated successfully!');
-            window.location.href = '/admin-panel/user-list/'
+            window.location.href = '/admin-panel/'
             // // Optionally reload the data to show updated values
             // setTimeout(() => loadUserData(), 1000);
         } else {

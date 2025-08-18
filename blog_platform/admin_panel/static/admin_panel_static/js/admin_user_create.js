@@ -121,7 +121,7 @@ async function handleFormSubmit(e) {
                 field.classList.remove('is-valid', 'is-invalid');
             });
             
-            window.location.href = "/admin-panel/user-list/";
+            window.location.href = "/admin-panel/";
         } else {
             // Handle validation errors from server
             let hasFieldErrors = false;
