@@ -49,11 +49,16 @@ class AdminPostDetailView(SuperUserRequiredMixin,TemplateView):
         context['is_liked'] = is_liked
         return context 
            
+@method_decorator(never_cache, name='dispatch')
 class AdminCommentView(SuperUserRequiredMixin, ActiveSectionMixin, View):    
         template_name = 'admin_panel/admin_comments_list.html'
+        active_section = 'admin_comments' 
         
         def get(self, request):
             comments = Comment.objects.all()
-            context = {'comments': comments}
+            context = {
+                'comments': comments,
+                'active_section': self.active_section
+                }
             return render(request, self.template_name, context=context)
             
